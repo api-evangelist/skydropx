@@ -1,0 +1,51 @@
+generated: '2026-07-12'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: skydropx.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 19 07:18:05 2026 GMT
+  hsts: false
+  http_status: 301
+- host: pro.skydropx.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 21 19:01:09 2026 GMT
+  hsts: false
+  http_status: 302
+- host: api.skydropx.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 23 05:38:33 2026 GMT
+  hsts: false
+  http_status: 302
+domains:
+- domain: skydropx.com
+  dnssec: false
+  caa:
+  - 0 issue "comodoca.com"
+  - 0 issue "digicert.com; cansignhttpexchanges=yes"
+  - 0 issue "godaddy.com"
+  - 0 issue "letsencrypt.org"
+  - 0 issue "pki.goog; cansignhttpexchanges=yes"
+  - 0 issue "ssl.com"
+  - 0 issue "starfieldtech.com"
+  - 0 issuewild "amazon.com"
+  - 0 issuewild "amazontrust.com"
+  - 0 issuewild "comodoca.com"
+  - 0 issuewild "digicert.com; cansignhttpexchanges=yes"
+  - 0 issuewild "godaddy.com"
+  - 0 issuewild "letsencrypt.org"
+  - 0 issuewild "pki.goog; cansignhttpexchanges=yes"
+  - 0 issuewild "ssl.com"
+  - 0 issuewild "starfieldtech.com"
+  spf: true
+  dmarc: true
+  dmarc_policy: none
+notes: >-
+  All three probed hosts (skydropx.com, pro.skydropx.com, api.skydropx.com)
+  serve HTTPS over TLS 1.3 with valid certificates, but none returned an HSTS
+  (Strict-Transport-Security) response header at the time of probing. The apex
+  domain publishes a broad CAA policy and an SPF record, and a DMARC record with
+  a monitor-only policy (p=none). DNSSEC is not enabled.

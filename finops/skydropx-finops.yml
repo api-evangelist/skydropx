@@ -1,0 +1,94 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Skydropx
+providerId: skydropx
+created: '2026-07-12'
+modified: '2026-07-12'
+reconciled: false
+tags:
+- Shipping
+- Logistics
+- Multi-Carrier
+- Mexico
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Skydropx spend. Skydropx is a prepaid, pay-per-label shipping
+  platform: the platform and API are free, and cost is driven by the labels you
+  generate plus per-shipment surcharges (for example dimensional/weight
+  adjustments), debited from a prepaid wallet balance. There is no per-API-call
+  fee. The dominant cost driver is label volume and the carrier/service mix
+  chosen at quotation time, so cost optimization happens by comparing carrier
+  rates before purchasing labels and by minimizing corrective surcharges through
+  accurate parcel data.
+notes: >-
+  Per-label rates are dynamic and not reconciled here. The prepaid wallet
+  balance is readable via GET /finance/credits and applied surcharges via
+  GET /finance/extra-charges, which together support spend reconciliation.
+  Verify current rates and surcharge policy on Skydropx's pricing pages.
+sources:
+- https://www.skydropx.com/
+- https://pro.skydropx.com/es-MX/api-docs
+- https://docs.skydropx.com/
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Skydropx
+serviceCategory: Shipping and Logistics
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Prepaid
+  billingCurrency: MXN
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: Skydropx
+  ServiceCategory: Shipping and Logistics
+  ProviderName: Skydropx
+  PublisherName: Skydropx
+  InvoiceIssuerName: Skydropx
+  BillingCurrency: MXN
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: shipping_labels
+  description: Shipping labels generated, billed per label at dynamic carrier rates.
+  unit: labels
+  aggregation: sum
+  dimensions:
+  - account
+  - carrier
+  - service_level
+- name: extra_charges
+  description: Per-shipment surcharges and adjustments (for example dimensional/weight corrections).
+  unit: charges
+  aggregation: sum
+  dimensions:
+  - account
+  - shipment
+- name: wallet_balance
+  description: Prepaid wallet credit balance drawn down as labels and surcharges are billed.
+  unit: currency
+  aggregation: last
+  dimensions:
+  - account
+principles:
+- name: Visibility
+  description: Track label spend per carrier and service level, and reconcile extra charges via GET /finance/extra-charges against the wallet balance from GET /finance/credits.
+- name: Allocation
+  description: Tag shipments/orders with references so label cost maps to stores, channels, or cost centers.
+- name: Optimization
+  description: Compare multi-carrier quotations before purchasing labels and supply accurate parcel weight/dimensions to avoid corrective surcharges.
+- name: Accountability
+  description: Monitor the prepaid wallet balance and set top-up thresholds; review label volume and surcharge trends against budget.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

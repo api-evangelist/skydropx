@@ -1,0 +1,313 @@
+{
+  "info": {
+    "name": "Skydropx Pro API",
+    "description": "Multi-carrier shipping and logistics API for the Skydropx platform (Mexico / Latin America). Base URL: https://pro.skydropx.com/api/v1 (sandbox https://sb-pro.skydropx.com/api/v1). Authenticated with an OAuth2 client-credentials Bearer token issued from POST /oauth/token. A separate classic Skydropx API (https://api.skydropx.com/v1) uses an 'Authorization: Token token=API_KEY' header. Request/response bodies are modeled and should be reconciled against the live reference.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{accessToken}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://pro.skydropx.com/api/v1", "type": "string" },
+    { "key": "accessToken", "value": "", "type": "string" },
+    { "key": "clientId", "value": "", "type": "string" },
+    { "key": "clientSecret", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Issue an OAuth2 access token",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/x-www-form-urlencoded" }],
+            "body": { "mode": "urlencoded", "urlencoded": [
+              { "key": "grant_type", "value": "client_credentials" },
+              { "key": "client_id", "value": "{{clientId}}" },
+              { "key": "client_secret", "value": "{{clientSecret}}" }
+            ] },
+            "url": { "raw": "{{baseUrl}}/oauth/token", "host": ["{{baseUrl}}"], "path": ["oauth", "token"] },
+            "description": "Exchanges client_id and client_secret for a Bearer access token (valid ~2 hours) using the client_credentials grant."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Quotations",
+      "item": [
+        {
+          "name": "Create a rate quotation",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"zip_from\": \"01000\",\n  \"zip_to\": \"64000\",\n  \"parcel\": {\n    \"length\": 20,\n    \"width\": 20,\n    \"height\": 10,\n    \"weight\": 1\n  }\n}" },
+            "url": { "raw": "{{baseUrl}}/quotations", "host": ["{{baseUrl}}"], "path": ["quotations"] },
+            "description": "Requests multi-carrier shipping rates for a parcel between an origin and destination postal code."
+          }
+        },
+        {
+          "name": "Retrieve a quotation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/quotations/:id", "host": ["{{baseUrl}}"], "path": ["quotations", ":id"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Retrieves a previously created quotation and its rates by id."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Shipments",
+      "item": [
+        {
+          "name": "List shipments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/shipments", "host": ["{{baseUrl}}"], "path": ["shipments"] },
+            "description": "Lists shipments, optionally filtered by status and date range."
+          }
+        },
+        {
+          "name": "Create a shipment",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"quotation_id\": \"\",\n  \"rate_id\": \"\",\n  \"address_from\": {},\n  \"address_to\": {}\n}" },
+            "url": { "raw": "{{baseUrl}}/shipments", "host": ["{{baseUrl}}"], "path": ["shipments"] },
+            "description": "Creates a shipment from a quotation and selected rate, purchasing the label and debiting the wallet."
+          }
+        },
+        {
+          "name": "Retrieve a shipment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/shipments/:id", "host": ["{{baseUrl}}"], "path": ["shipments", ":id"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Retrieves a shipment by id, including label URL and tracking data."
+          }
+        },
+        {
+          "name": "Cancel a shipment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/shipments/:id/cancellations", "host": ["{{baseUrl}}"], "path": ["shipments", ":id", "cancellations"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Requests cancellation of a shipment and refund of the label where eligible."
+          }
+        },
+        {
+          "name": "Add shipment protection",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": { "raw": "{{baseUrl}}/shipments/:id/protect", "host": ["{{baseUrl}}"], "path": ["shipments", ":id", "protect"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Adds optional parcel protection / insurance coverage to a shipment."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders and Labels",
+      "item": [
+        {
+          "name": "List orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/orders", "host": ["{{baseUrl}}"], "path": ["orders"] },
+            "description": "Lists all orders."
+          }
+        },
+        {
+          "name": "Create an order",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": { "raw": "{{baseUrl}}/orders", "host": ["{{baseUrl}}"], "path": ["orders"] },
+            "description": "Creates a new order."
+          }
+        },
+        {
+          "name": "Retrieve an order",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/orders/:id", "host": ["{{baseUrl}}"], "path": ["orders", ":id"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Retrieves an order by id."
+          }
+        },
+        {
+          "name": "Get order label URLs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/orders/:id/labels", "host": ["{{baseUrl}}"], "path": ["orders", ":id", "labels"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Retrieves the generated shipping label URLs (PDF) for an order."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pickups",
+      "item": [
+        {
+          "name": "List pickups",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/pickups", "host": ["{{baseUrl}}"], "path": ["pickups"] },
+            "description": "Lists all scheduled carrier pickups."
+          }
+        },
+        {
+          "name": "Schedule a pickup",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": { "raw": "{{baseUrl}}/pickups", "host": ["{{baseUrl}}"], "path": ["pickups"] },
+            "description": "Schedules a carrier pickup (recoleccion) for one or more shipments."
+          }
+        },
+        {
+          "name": "Check pickup coverage",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/pickups/coverage", "host": ["{{baseUrl}}"], "path": ["pickups", "coverage"] },
+            "description": "Checks available pickup dates for a location and carrier."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Address Templates",
+      "item": [
+        {
+          "name": "List address templates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/address_templates", "host": ["{{baseUrl}}"], "path": ["address_templates"] },
+            "description": "Retrieves all saved address templates."
+          }
+        },
+        {
+          "name": "Create an address template",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": { "raw": "{{baseUrl}}/address_templates", "host": ["{{baseUrl}}"], "path": ["address_templates"] },
+            "description": "Creates a new saved address template."
+          }
+        },
+        {
+          "name": "Validate an address with carriers",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/address_templates/:id/verify_by_carriers", "host": ["{{baseUrl}}"], "path": ["address_templates", ":id", "verify_by_carriers"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Validates a saved address against carrier serviceability."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tracking",
+      "item": [
+        {
+          "name": "Track a shipment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/shipments/tracking/:tracking_number", "host": ["{{baseUrl}}"], "path": ["shipments", "tracking", ":tracking_number"], "variable": [{ "key": "tracking_number", "value": "" }] },
+            "description": "Retrieves the current tracking status and event history for a tracking number."
+          }
+        },
+        {
+          "name": "Report a tracking event",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": { "raw": "{{baseUrl}}/shipments/tracking", "host": ["{{baseUrl}}"], "path": ["shipments", "tracking"] },
+            "description": "Reports a tracking event for a fleet or externally fulfilled shipment."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Finance",
+      "item": [
+        {
+          "name": "Get account credit balance",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/finance/credits", "host": ["{{baseUrl}}"], "path": ["finance", "credits"] },
+            "description": "Returns the current prepaid account credit (wallet) balance."
+          }
+        },
+        {
+          "name": "List extra charges",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/finance/extra-charges", "host": ["{{baseUrl}}"], "path": ["finance", "extra-charges"] },
+            "description": "Lists surcharges and extra charges applied to shipments, with pagination."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Catalog",
+      "item": [
+        {
+          "name": "List carrier services",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/shipments/carrier_services", "host": ["{{baseUrl}}"], "path": ["shipments", "carrier_services"] },
+            "description": "Lists the carrier services available to the account."
+          }
+        },
+        {
+          "name": "List packaging codes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/shipments/packagings", "host": ["{{baseUrl}}"], "path": ["shipments", "packagings"] },
+            "description": "Lists packaging type codes usable when creating shipments."
+          }
+        },
+        {
+          "name": "List consignment-note codes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/shipments/consignment_notes", "host": ["{{baseUrl}}"], "path": ["shipments", "consignment_notes"] },
+            "description": "Lists SAT Carta Porte consignment-note codes required for applicable Mexican shipments."
+          }
+        },
+        {
+          "name": "List office / drop-off points",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/office_points", "host": ["{{baseUrl}}"], "path": ["office_points"] },
+            "description": "Retrieves office and drop-off point locations for a carrier or rate."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,253 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Skydropx Pro API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{accessToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "Authentication", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Issue an OAuth2 access token.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://pro.skydropx.com/api/v1/oauth/token",
+            "auth": { "type": "none" },
+            "body": { "type": "text", "data": "grant_type=client_credentials&client_id={{clientId}}&client_secret={{clientSecret}}" }
+          },
+          "docs": "Exchanges client_id and client_secret for a Bearer access token (valid ~2 hours) using the client_credentials grant. Content-Type application/x-www-form-urlencoded."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Quotations", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create a rate quotation.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://pro.skydropx.com/api/v1/quotations",
+            "body": { "type": "json", "data": "{\n  \"zip_from\": \"01000\",\n  \"zip_to\": \"64000\",\n  \"parcel\": { \"length\": 20, \"width\": 20, \"height\": 10, \"weight\": 1 }\n}" }
+          },
+          "docs": "Requests multi-carrier shipping rates for a parcel between an origin and destination postal code."
+        },
+        {
+          "info": { "name": "Retrieve a quotation.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://pro.skydropx.com/api/v1/quotations/:id",
+            "params": [ { "name": "id", "value": "", "type": "path", "description": "The quotation id." } ]
+          },
+          "docs": "Retrieves a previously created quotation and its rates by id."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Shipments", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List shipments.", "type": "http" },
+          "http": { "method": "GET", "url": "https://pro.skydropx.com/api/v1/shipments" },
+          "docs": "Lists shipments, optionally filtered by status and date range."
+        },
+        {
+          "info": { "name": "Create a shipment.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://pro.skydropx.com/api/v1/shipments",
+            "body": { "type": "json", "data": "{\n  \"quotation_id\": \"\",\n  \"rate_id\": \"\",\n  \"address_from\": {},\n  \"address_to\": {}\n}" }
+          },
+          "docs": "Creates a shipment from a quotation and selected rate, purchasing the label and debiting the wallet."
+        },
+        {
+          "info": { "name": "Retrieve a shipment.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://pro.skydropx.com/api/v1/shipments/:id",
+            "params": [ { "name": "id", "value": "", "type": "path", "description": "The shipment id." } ]
+          },
+          "docs": "Retrieves a shipment by id, including label URL and tracking data."
+        },
+        {
+          "info": { "name": "Cancel a shipment.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://pro.skydropx.com/api/v1/shipments/:id/cancellations",
+            "params": [ { "name": "id", "value": "", "type": "path", "description": "The shipment id." } ]
+          },
+          "docs": "Requests cancellation of a shipment and refund of the label where eligible."
+        },
+        {
+          "info": { "name": "Add shipment protection.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://pro.skydropx.com/api/v1/shipments/:id/protect",
+            "params": [ { "name": "id", "value": "", "type": "path", "description": "The shipment id." } ],
+            "body": { "type": "json", "data": "{}" }
+          },
+          "docs": "Adds optional parcel protection / insurance coverage to a shipment."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Orders and Labels", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List orders.", "type": "http" },
+          "http": { "method": "GET", "url": "https://pro.skydropx.com/api/v1/orders" },
+          "docs": "Lists all orders."
+        },
+        {
+          "info": { "name": "Create an order.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://pro.skydropx.com/api/v1/orders",
+            "body": { "type": "json", "data": "{}" }
+          },
+          "docs": "Creates a new order."
+        },
+        {
+          "info": { "name": "Retrieve an order.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://pro.skydropx.com/api/v1/orders/:id",
+            "params": [ { "name": "id", "value": "", "type": "path", "description": "The order id." } ]
+          },
+          "docs": "Retrieves an order by id."
+        },
+        {
+          "info": { "name": "Get order label URLs.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://pro.skydropx.com/api/v1/orders/:id/labels",
+            "params": [ { "name": "id", "value": "", "type": "path", "description": "The order id." } ]
+          },
+          "docs": "Retrieves the generated shipping label URLs (PDF) for an order."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Pickups", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List pickups.", "type": "http" },
+          "http": { "method": "GET", "url": "https://pro.skydropx.com/api/v1/pickups" },
+          "docs": "Lists all scheduled carrier pickups."
+        },
+        {
+          "info": { "name": "Schedule a pickup.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://pro.skydropx.com/api/v1/pickups",
+            "body": { "type": "json", "data": "{}" }
+          },
+          "docs": "Schedules a carrier pickup (recoleccion) for one or more shipments."
+        },
+        {
+          "info": { "name": "Check pickup coverage.", "type": "http" },
+          "http": { "method": "GET", "url": "https://pro.skydropx.com/api/v1/pickups/coverage" },
+          "docs": "Checks available pickup dates for a location and carrier."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Address Templates", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List address templates.", "type": "http" },
+          "http": { "method": "GET", "url": "https://pro.skydropx.com/api/v1/address_templates" },
+          "docs": "Retrieves all saved address templates."
+        },
+        {
+          "info": { "name": "Create an address template.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://pro.skydropx.com/api/v1/address_templates",
+            "body": { "type": "json", "data": "{}" }
+          },
+          "docs": "Creates a new saved address template."
+        },
+        {
+          "info": { "name": "Validate an address with carriers.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://pro.skydropx.com/api/v1/address_templates/:id/verify_by_carriers",
+            "params": [ { "name": "id", "value": "", "type": "path", "description": "The address template id." } ]
+          },
+          "docs": "Validates a saved address against carrier serviceability."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Tracking", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Track a shipment.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://pro.skydropx.com/api/v1/shipments/tracking/:tracking_number",
+            "params": [ { "name": "tracking_number", "value": "", "type": "path", "description": "The carrier tracking number." } ]
+          },
+          "docs": "Retrieves the current tracking status and event history for a tracking number."
+        },
+        {
+          "info": { "name": "Report a tracking event.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://pro.skydropx.com/api/v1/shipments/tracking",
+            "body": { "type": "json", "data": "{}" }
+          },
+          "docs": "Reports a tracking event for a fleet or externally fulfilled shipment."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Finance", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Get account credit balance.", "type": "http" },
+          "http": { "method": "GET", "url": "https://pro.skydropx.com/api/v1/finance/credits" },
+          "docs": "Returns the current prepaid account credit (wallet) balance."
+        },
+        {
+          "info": { "name": "List extra charges.", "type": "http" },
+          "http": { "method": "GET", "url": "https://pro.skydropx.com/api/v1/finance/extra-charges" },
+          "docs": "Lists surcharges and extra charges applied to shipments, with pagination."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Catalog", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List carrier services.", "type": "http" },
+          "http": { "method": "GET", "url": "https://pro.skydropx.com/api/v1/shipments/carrier_services" },
+          "docs": "Lists the carrier services available to the account."
+        },
+        {
+          "info": { "name": "List packaging codes.", "type": "http" },
+          "http": { "method": "GET", "url": "https://pro.skydropx.com/api/v1/shipments/packagings" },
+          "docs": "Lists packaging type codes usable when creating shipments."
+        },
+        {
+          "info": { "name": "List consignment-note codes.", "type": "http" },
+          "http": { "method": "GET", "url": "https://pro.skydropx.com/api/v1/shipments/consignment_notes" },
+          "docs": "Lists SAT Carta Porte consignment-note codes required for applicable Mexican shipments."
+        },
+        {
+          "info": { "name": "List office / drop-off points.", "type": "http" },
+          "http": { "method": "GET", "url": "https://pro.skydropx.com/api/v1/office_points" },
+          "docs": "Retrieves office and drop-off point locations for a carrier or rate."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

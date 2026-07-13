@@ -1,0 +1,36 @@
+generated: '2026-07-12'
+method: derived
+source: openapi/skydropx-openapi.yml
+summary:
+  types:
+  - oauth2
+  - apiKey
+schemes:
+- name: oauth2ClientCredentials
+  type: oauth2
+  flow: clientCredentials
+  tokenUrl: https://pro.skydropx.com/api/v1/oauth/token
+  grantType: client_credentials
+  description: >-
+    Skydropx Pro API authentication. Exchange a client_id and client_secret at
+    POST https://pro.skydropx.com/api/v1/oauth/token (Content-Type
+    application/x-www-form-urlencoded, grant_type=client_credentials) for a
+    Bearer access token, then send it as `Authorization: Bearer ACCESS_TOKEN`.
+    Access tokens are valid for about two hours and must be refreshed. Requests
+    are rate limited to roughly two per second.
+  sources:
+  - openapi/skydropx-openapi.yml
+  - https://pro.skydropx.com/es-MX/api-docs
+- name: apiKeyToken
+  type: apiKey
+  in: header
+  keyName: Authorization
+  description: >-
+    Classic Skydropx API authentication (base https://api.skydropx.com/v1). Pass
+    your API key in the Authorization header as
+    `Authorization: Token token=YOUR_API_KEY`. API keys are issued by Skydropx
+    support on request. This scheme is documented but is not modeled in the
+    Skydropx Pro OpenAPI.
+  sources:
+  - https://docs.skydropx.com/
+  - https://help.skydropx.com/articulos-cda/conectar-la-api-skydropx

@@ -1,0 +1,57 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Skydropx
+providerId: skydropx
+created: '2026-07-12'
+modified: '2026-07-12'
+reconciled: false
+tags:
+- Shipping
+- Logistics
+- Multi-Carrier
+- Mexico
+- Rate Limiting
+- Quotas
+description: >-
+  The Skydropx Pro API is rate limited to roughly two requests per second, and
+  OAuth2 client-credentials access tokens are valid for about two hours before a
+  new token must be issued. Clients should cache the Bearer token for its
+  lifetime rather than requesting a new one per call, and should throttle
+  request bursts to stay within the per-second limit. Fixed numeric per-endpoint
+  quotas beyond the ~2 req/sec limit are not otherwise published.
+notes: >-
+  The ~2 requests/second limit and ~2 hour token lifetime are documented for the
+  Skydropx Pro API. Limits for the classic Skydropx API
+  (https://api.skydropx.com/v1) and the Radar API are not separately published.
+  Verify current limits in the Skydropx Pro API documentation during
+  reconciliation.
+sources:
+- https://pro.skydropx.com/es-MX/api-docs
+- https://docs.skydropx.com/
+responseCodes:
+  throttled: 429
+limits:
+- name: Pro API Request Rate
+  scope: account
+  metric: requests
+  limit: ~2 per second
+  notes: Documented rate limit for the Skydropx Pro API.
+- name: Access Token Lifetime
+  scope: account
+  metric: tokens
+  limit: ~2 hours per token
+  notes: OAuth2 client-credentials access tokens expire after about two hours; re-issue via POST /oauth/token.
+- name: Classic API Request Rate
+  scope: account
+  metric: requests
+  limit: not published
+  notes: No fixed numeric limit is documented for the classic Skydropx API (api.skydropx.com/v1).
+policies:
+- name: Token Caching
+  description: Reuse a valid Bearer token across requests for its ~2 hour lifetime instead of requesting one per call.
+- name: Backoff Strategy
+  description: Throttle to stay under ~2 requests/second and apply exponential backoff with jitter, honoring Retry-After on 429 responses.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,125 @@
+aid: skydropx
+name: Skydropx
+review:
+  question: Does Skydropx expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-12'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. Skydropx's public API surface is
+    request/response REST over HTTPS. Asynchronous shipment status updates are
+    delivered by Skydropx POSTing to a client-configured webhook endpoint
+    (server-to-endpoint HTTP), not over a WebSocket or SSE stream on Skydropx's
+    own API. There is no server-push transport on Skydropx's own API to model.
+findings:
+  summary: |
+    Skydropx does not publish a documented public WebSocket API. Skydropx is a
+    Mexican multi-carrier shipping and logistics platform. Its modern Skydropx
+    Pro API (base https://pro.skydropx.com/api/v1, sandbox
+    https://sb-pro.skydropx.com/api/v1) is pure request/response REST over
+    HTTPS, authenticated with an OAuth2 client-credentials Bearer token obtained
+    from POST /oauth/token. A separate classic Skydropx API
+    (https://api.skydropx.com/v1) is authenticated with an
+    `Authorization: Token token=API_KEY` header, and a Radar tracking API
+    (https://radar-api.skydropx.com/v1) also exists. Real-time-style shipment
+    status changes (created, picked up, in transit, delivered, exception) are
+    pushed to client webhook endpoints via HTTP POST, not over a WebSocket. No
+    realtime, bidirectional, or streaming WebSocket (ws:// or wss://) endpoint
+    is documented anywhere in Skydropx's API references as of the review date.
+  saas: |
+    Skydropx is a proprietary SaaS platform (not open source). The platform is
+    free to use; billing is prepaid pay-per-label from a wallet balance managed
+    via the Finance API (GET /finance/credits). Accounts and API credentials are
+    provisioned through the Skydropx Pro dashboard; classic API keys are issued
+    on request via support.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://pro.skydropx.com/api/v1
+      documented: true
+      note: Skydropx Pro API. OAuth2 client-credentials Bearer auth. Sandbox at https://sb-pro.skydropx.com/api/v1.
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.skydropx.com/v1
+      documented: true
+      note: Classic Skydropx API, authenticated with an Authorization Token header (API key). Not modeled in the OpenAPI.
+    - protocol: REST
+      scheme: https
+      baseURL: https://radar-api.skydropx.com/v1
+      documented: true
+      note: Radar tracking API (shipments and tracking). Not modeled in the OpenAPI.
+    - protocol: Webhook
+      scheme: https
+      documented: true
+      note: Skydropx POSTs shipment status-change notifications to a client-configured HTTP endpoint. Server-to-endpoint HTTP, not WebSocket.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented in any Skydropx API reference as of the review date.
+  endpointsConfirmedRest:
+    - POST   https://pro.skydropx.com/api/v1/oauth/token
+    - POST   https://pro.skydropx.com/api/v1/quotations
+    - GET    https://pro.skydropx.com/api/v1/quotations/{id}
+    - GET    https://pro.skydropx.com/api/v1/shipments
+    - POST   https://pro.skydropx.com/api/v1/shipments
+    - GET    https://pro.skydropx.com/api/v1/shipments/{id}
+    - POST   https://pro.skydropx.com/api/v1/shipments/{id}/cancellations
+    - POST   https://pro.skydropx.com/api/v1/shipments/{id}/protect
+    - GET    https://pro.skydropx.com/api/v1/shipments/tracking/{tracking_number}
+    - POST   https://pro.skydropx.com/api/v1/shipments/tracking
+    - GET    https://pro.skydropx.com/api/v1/orders
+    - POST   https://pro.skydropx.com/api/v1/orders
+    - GET    https://pro.skydropx.com/api/v1/orders/{id}
+    - PATCH  https://pro.skydropx.com/api/v1/orders/{id}
+    - GET    https://pro.skydropx.com/api/v1/orders/{id}/labels
+    - GET    https://pro.skydropx.com/api/v1/pickups
+    - POST   https://pro.skydropx.com/api/v1/pickups
+    - GET    https://pro.skydropx.com/api/v1/pickups/{id}
+    - POST   https://pro.skydropx.com/api/v1/pickups/reschedule
+    - GET    https://pro.skydropx.com/api/v1/pickups/coverage
+    - GET    https://pro.skydropx.com/api/v1/address_templates
+    - POST   https://pro.skydropx.com/api/v1/address_templates
+    - GET    https://pro.skydropx.com/api/v1/address_templates/{id}
+    - PATCH  https://pro.skydropx.com/api/v1/address_templates/{id}
+    - DELETE https://pro.skydropx.com/api/v1/address_templates/{id}
+    - POST   https://pro.skydropx.com/api/v1/address_templates/{id}/verify_by_carriers
+    - GET    https://pro.skydropx.com/api/v1/finance/credits
+    - GET    https://pro.skydropx.com/api/v1/finance/extra-charges
+    - GET    https://pro.skydropx.com/api/v1/shipments/carrier_services
+    - GET    https://pro.skydropx.com/api/v1/shipments/packagings
+    - GET    https://pro.skydropx.com/api/v1/shipments/consignment_notes
+    - GET    https://pro.skydropx.com/api/v1/office_points
+  endpointsModeledSchemas: |
+    Endpoint paths, HTTP methods, base URLs, the OAuth2 client-credentials flow,
+    and the token endpoint are grounded in Skydropx's public API documentation
+    (docs.skydropx.com and pro.skydropx.com/es-MX/api-docs). Request and response
+    SCHEMAS in openapi/skydropx-openapi.yml are MODELED from documented fields
+    (zip_from/zip_to/parcel on quotations; quotation_id/rate_id/address_from/
+    address_to/consignment_note codes on shipments) plus common shipping-API
+    conventions, and should be reconciled against the live reference before
+    production use. The classic Skydropx API (api.skydropx.com/v1) and Radar API
+    (radar-api.skydropx.com/v1) are acknowledged but not modeled.
+sources:
+  - url: https://docs.skydropx.com/
+    type: Documentation
+    note: Classic Skydropx API reference. Base https://api.skydropx.com/v1; Authorization Token header; quotations, shipments, labels, cancel_label_requests, carriers, consignment_notes. No WebSocket mentioned.
+  - url: https://pro.skydropx.com/es-MX/api-docs
+    type: APIReference
+    note: Skydropx Pro API reference. Base https://pro.skydropx.com/api/v1; OAuth2 client-credentials at POST /oauth/token; 2h token; ~2 req/sec. All REST.
+  - url: https://help.skydropx.com/articulos-cda/conectar-la-api-skydropx
+    type: Documentation
+    note: Help-center guide to connecting the Skydropx API and obtaining credentials.
+  - url: https://www.skydropx.com/plataforma/api/
+    type: Documentation
+    note: Marketing/overview page for the Skydropx API platform.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists. Skydropx's public API is
+    request/response REST (Skydropx Pro over OAuth2 Bearer, classic Skydropx
+    over an API-key Token header, plus Radar tracking). Asynchronous status
+    updates are delivered by Skydropx POSTing to a client webhook endpoint, not
+    over a server-push transport on Skydropx's own API, so no AsyncAPI document
+    was created.

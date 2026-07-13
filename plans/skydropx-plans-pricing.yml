@@ -1,0 +1,93 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Skydropx
+providerId: skydropx
+created: '2026-07-12'
+modified: '2026-07-12'
+reconciled: false
+tags:
+- Shipping
+- Logistics
+- Multi-Carrier
+- Mexico
+- Labels
+- Plans
+description: >-
+  Skydropx uses a prepaid, pay-per-label model rather than tiered subscription
+  fees for API access. The platform and the API are free to sign up for and use;
+  you are charged the cost of each shipping label (plus any carrier surcharges)
+  against a prepaid wallet balance, with no fixed monthly commitment. Larger
+  merchants and platforms can negotiate volume/enterprise arrangements with
+  Skydropx. Per-label prices are dynamic and depend on carrier, weight,
+  dimensions, origin, and destination, so exact rates are not reconciled here.
+notes: >-
+  There is no separate fee for API calls - you pay for the labels you generate.
+  Verify current per-label rates, wallet mechanics, extra-charge policy, and any
+  Pro/enterprise terms on Skydropx's pricing pages and in the Pro dashboard
+  during reconciliation.
+sources:
+- https://www.skydropx.com/
+- https://www.skydropx.com/plataforma/api/
+- https://pro.skydropx.com/es-MX/api-docs
+plans:
+- id: skydropx-free-payg
+  name: Free (Pay As You Go)
+  type: usage
+  description: >-
+    Free to sign up and use the platform and API. You pay the price of each
+    shipping label from a prepaid wallet balance, with no monthly subscription
+    commitment. Includes multi-carrier quotations, shipment/label creation,
+    pickups, tracking, and webhooks.
+  entries:
+  - label: Shipping Label
+    name: shipping_label
+    type: usage
+    metric: labels
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: per-label (dynamic by carrier, weight, dimensions, and route)
+    userMultiplied: false
+  - label: Extra Charges / Surcharges
+    name: extra_charges
+    type: usage
+    metric: charges
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: variable per shipment (e.g. dimensional/weight adjustments)
+    userMultiplied: false
+  elements:
+  - name: Multi-Carrier Quotations
+  - name: Shipment and Label Creation
+  - name: Pickups
+  - name: Tracking and Webhooks
+  - name: Prepaid Wallet
+- id: skydropx-enterprise
+  name: Enterprise / Volume
+  type: enterprise
+  description: >-
+    Negotiated arrangements for high-volume merchants, marketplaces, and
+    platforms - preferential per-label pricing, dedicated support, and custom
+    terms. Contact Skydropx.
+  entries:
+  - label: Volume Agreement
+    name: volume_agreement
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Negotiated Per-Label Pricing
+  - name: Dedicated Support
+  - name: Custom Terms
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
