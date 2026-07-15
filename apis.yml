@@ -179,6 +179,8 @@ apis:
     services, packaging type codes, office/drop-off points, and SAT Carta Porte
     consignment-note codes required for Mexican shipping.
 common:
+- type: AgenticAccess
+  url: agentic-access/skydropx-agentic-access.yml
 - type: DomainSecurity
   url: security/skydropx-domain-security.yml
 - type: Authentication
