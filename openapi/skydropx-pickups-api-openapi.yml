@@ -1,0 +1,229 @@
+openapi: 3.0.3
+info:
+  title: Skydropx Pro Address Templates Pickups API
+  description: 'The Skydropx Pro API is a REST interface for the Skydropx multi-carrier shipping and logistics platform (Mexico and Latin America). It lets you request multi-carrier rate quotations, create shipments and purchase labels, schedule carrier pickups, manage saved address templates, track parcels, and read the prepaid account credit balance. All requests are authenticated with an OAuth2 client-credentials Bearer token obtained from POST /oauth/token using your client_id and client_secret. Tokens are valid for about two hours and requests are rate limited to roughly two per second.
+
+
+    Grounding note: base URLs, the OAuth2 client-credentials flow, the token endpoint, the rate limit, and the resource paths below are grounded in Skydropx''s public API documentation (docs.skydropx.com and pro.skydropx.com/es-MX/api-docs). Request and response SCHEMAS are MODELED from documented fields and common shipping-API conventions and should be reconciled against the live reference before production use. A separate classic Skydropx API (https://api.skydropx.com/v1, authenticated with an `Authorization: Token token=API_KEY` header) and a Radar tracking API (https://radar-api.skydropx.com/v1) also exist and are not modeled here.'
+  version: '1.0'
+  contact:
+    name: Skydropx
+    url: https://www.skydropx.com/
+servers:
+- url: https://pro.skydropx.com/api/v1
+  description: Skydropx Pro production
+- url: https://sb-pro.skydropx.com/api/v1
+  description: Skydropx Pro sandbox
+security:
+- oauth2ClientCredentials: []
+tags:
+- name: Pickups
+  description: Schedule and manage carrier pickups (recolecciones).
+paths:
+  /pickups:
+    get:
+      operationId: listPickups
+      tags:
+      - Pickups
+      summary: List pickups
+      description: Lists all scheduled carrier pickups.
+      responses:
+        '200':
+          description: A list of pickups.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Pickup'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createPickup
+      tags:
+      - Pickups
+      summary: Schedule a pickup
+      description: Schedules a carrier pickup (recoleccion) for one or more shipments.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PickupInput'
+      responses:
+        '201':
+          description: The scheduled pickup.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pickup'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /pickups/{id}:
+    parameters:
+    - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getPickup
+      tags:
+      - Pickups
+      summary: Retrieve a pickup
+      description: Retrieves a pickup by id.
+      responses:
+        '200':
+          description: The requested pickup.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pickup'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /pickups/reschedule:
+    post:
+      operationId: reschedulePickup
+      tags:
+      - Pickups
+      summary: Reschedule a pickup
+      description: Reschedules an existing pickup to a new date.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: The rescheduled pickup.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pickup'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /pickups/coverage:
+    get:
+      operationId: getPickupCoverage
+      tags:
+      - Pickups
+      summary: Check pickup coverage
+      description: Checks available pickup dates for a location and carrier.
+      responses:
+        '200':
+          description: Available pickup dates.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    Pickup:
+      allOf:
+      - $ref: '#/components/schemas/PickupInput'
+      - type: object
+        properties:
+          id:
+            type: string
+          status:
+            type: string
+          confirmation_number:
+            type: string
+    Address:
+      type: object
+      description: A shipping address (origin, destination, or saved template).
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        company:
+          type: string
+        street1:
+          type: string
+        street2:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+        zip:
+          type: string
+        country:
+          type: string
+          description: ISO country code, e.g. MX.
+        phone:
+          type: string
+        email:
+          type: string
+        reference:
+          type: string
+      additionalProperties: true
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties: true
+    PickupInput:
+      type: object
+      properties:
+        carrier:
+          type: string
+        date:
+          type: string
+          format: date
+        address:
+          $ref: '#/components/schemas/Address'
+        shipment_ids:
+          type: array
+          items:
+            type: string
+      additionalProperties: true
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier of the resource.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    oauth2ClientCredentials:
+      type: oauth2
+      description: 'OAuth2 client-credentials flow. Exchange client_id and client_secret at POST /oauth/token for a Bearer access token, sent as `Authorization: Bearer ACCESS_TOKEN`. Tokens last about two hours.'
+      flows:
+        clientCredentials:
+          tokenUrl: https://pro.skydropx.com/api/v1/oauth/token
+          scopes: {}

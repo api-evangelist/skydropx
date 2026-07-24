@@ -1,0 +1,135 @@
+openapi: 3.0.3
+info:
+  title: Skydropx Pro Address Templates Catalog API
+  description: 'The Skydropx Pro API is a REST interface for the Skydropx multi-carrier shipping and logistics platform (Mexico and Latin America). It lets you request multi-carrier rate quotations, create shipments and purchase labels, schedule carrier pickups, manage saved address templates, track parcels, and read the prepaid account credit balance. All requests are authenticated with an OAuth2 client-credentials Bearer token obtained from POST /oauth/token using your client_id and client_secret. Tokens are valid for about two hours and requests are rate limited to roughly two per second.
+
+
+    Grounding note: base URLs, the OAuth2 client-credentials flow, the token endpoint, the rate limit, and the resource paths below are grounded in Skydropx''s public API documentation (docs.skydropx.com and pro.skydropx.com/es-MX/api-docs). Request and response SCHEMAS are MODELED from documented fields and common shipping-API conventions and should be reconciled against the live reference before production use. A separate classic Skydropx API (https://api.skydropx.com/v1, authenticated with an `Authorization: Token token=API_KEY` header) and a Radar tracking API (https://radar-api.skydropx.com/v1) also exist and are not modeled here.'
+  version: '1.0'
+  contact:
+    name: Skydropx
+    url: https://www.skydropx.com/
+servers:
+- url: https://pro.skydropx.com/api/v1
+  description: Skydropx Pro production
+- url: https://sb-pro.skydropx.com/api/v1
+  description: Skydropx Pro sandbox
+security:
+- oauth2ClientCredentials: []
+tags:
+- name: Catalog
+  description: Carrier services, packagings, and consignment-note codes.
+paths:
+  /shipments/carrier_services:
+    get:
+      operationId: listCarrierServices
+      tags:
+      - Catalog
+      summary: List carrier services
+      description: Lists the carrier services available to the account.
+      responses:
+        '200':
+          description: Available carrier services.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /shipments/packagings:
+    get:
+      operationId: listPackagings
+      tags:
+      - Catalog
+      summary: List packaging codes
+      description: Lists packaging type codes usable when creating shipments.
+      responses:
+        '200':
+          description: Packaging codes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /shipments/consignment_notes:
+    get:
+      operationId: listConsignmentNotes
+      tags:
+      - Catalog
+      summary: List consignment-note codes
+      description: Lists SAT Carta Porte consignment-note codes (product classes, packaging) required for applicable Mexican shipments.
+      responses:
+        '200':
+          description: Consignment-note codes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /office_points:
+    get:
+      operationId: listOfficePoints
+      tags:
+      - Catalog
+      summary: List office / drop-off points
+      description: Retrieves office and drop-off point locations for a carrier or rate.
+      responses:
+        '200':
+          description: Office points.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties: true
+  responses:
+    Unauthorized:
+      description: Missing or invalid access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    oauth2ClientCredentials:
+      type: oauth2
+      description: 'OAuth2 client-credentials flow. Exchange client_id and client_secret at POST /oauth/token for a Bearer access token, sent as `Authorization: Bearer ACCESS_TOKEN`. Tokens last about two hours.'
+      flows:
+        clientCredentials:
+          tokenUrl: https://pro.skydropx.com/api/v1/oauth/token
+          scopes: {}

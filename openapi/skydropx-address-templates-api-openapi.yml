@@ -1,0 +1,220 @@
+openapi: 3.0.3
+info:
+  title: Skydropx Pro Address Templates API
+  description: 'The Skydropx Pro API is a REST interface for the Skydropx multi-carrier shipping and logistics platform (Mexico and Latin America). It lets you request multi-carrier rate quotations, create shipments and purchase labels, schedule carrier pickups, manage saved address templates, track parcels, and read the prepaid account credit balance. All requests are authenticated with an OAuth2 client-credentials Bearer token obtained from POST /oauth/token using your client_id and client_secret. Tokens are valid for about two hours and requests are rate limited to roughly two per second.
+
+
+    Grounding note: base URLs, the OAuth2 client-credentials flow, the token endpoint, the rate limit, and the resource paths below are grounded in Skydropx''s public API documentation (docs.skydropx.com and pro.skydropx.com/es-MX/api-docs). Request and response SCHEMAS are MODELED from documented fields and common shipping-API conventions and should be reconciled against the live reference before production use. A separate classic Skydropx API (https://api.skydropx.com/v1, authenticated with an `Authorization: Token token=API_KEY` header) and a Radar tracking API (https://radar-api.skydropx.com/v1) also exist and are not modeled here.'
+  version: '1.0'
+  contact:
+    name: Skydropx
+    url: https://www.skydropx.com/
+servers:
+- url: https://pro.skydropx.com/api/v1
+  description: Skydropx Pro production
+- url: https://sb-pro.skydropx.com/api/v1
+  description: Skydropx Pro sandbox
+security:
+- oauth2ClientCredentials: []
+tags:
+- name: Address Templates
+  description: Reusable saved addresses and carrier validation.
+paths:
+  /address_templates:
+    get:
+      operationId: listAddressTemplates
+      tags:
+      - Address Templates
+      summary: List address templates
+      description: Retrieves all saved address templates.
+      responses:
+        '200':
+          description: A list of address templates.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Address'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createAddressTemplate
+      tags:
+      - Address Templates
+      summary: Create an address template
+      description: Creates a new saved address template.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+      responses:
+        '201':
+          description: The created address template.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /address_templates/{id}:
+    parameters:
+    - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getAddressTemplate
+      tags:
+      - Address Templates
+      summary: Retrieve an address template
+      description: Retrieves a saved address template by id.
+      responses:
+        '200':
+          description: The requested address template.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateAddressTemplate
+      tags:
+      - Address Templates
+      summary: Update an address template
+      description: Updates a saved address template.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+      responses:
+        '200':
+          description: The updated address template.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      operationId: deleteAddressTemplate
+      tags:
+      - Address Templates
+      summary: Delete an address template
+      description: Deletes a saved address template.
+      responses:
+        '204':
+          description: The address template was deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /address_templates/{id}/verify_by_carriers:
+    parameters:
+    - $ref: '#/components/parameters/Id'
+    post:
+      operationId: verifyAddressByCarriers
+      tags:
+      - Address Templates
+      summary: Validate an address with carriers
+      description: Validates a saved address against carrier serviceability.
+      responses:
+        '200':
+          description: Validation result per carrier.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier of the resource.
+      schema:
+        type: string
+  responses:
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties: true
+    Address:
+      type: object
+      description: A shipping address (origin, destination, or saved template).
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        company:
+          type: string
+        street1:
+          type: string
+        street2:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+        zip:
+          type: string
+        country:
+          type: string
+          description: ISO country code, e.g. MX.
+        phone:
+          type: string
+        email:
+          type: string
+        reference:
+          type: string
+      additionalProperties: true
+  securitySchemes:
+    oauth2ClientCredentials:
+      type: oauth2
+      description: 'OAuth2 client-credentials flow. Exchange client_id and client_secret at POST /oauth/token for a Bearer access token, sent as `Authorization: Bearer ACCESS_TOKEN`. Tokens last about two hours.'
+      flows:
+        clientCredentials:
+          tokenUrl: https://pro.skydropx.com/api/v1/oauth/token
+          scopes: {}

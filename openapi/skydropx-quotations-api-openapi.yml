@@ -1,0 +1,184 @@
+openapi: 3.0.3
+info:
+  title: Skydropx Pro Address Templates Quotations API
+  description: 'The Skydropx Pro API is a REST interface for the Skydropx multi-carrier shipping and logistics platform (Mexico and Latin America). It lets you request multi-carrier rate quotations, create shipments and purchase labels, schedule carrier pickups, manage saved address templates, track parcels, and read the prepaid account credit balance. All requests are authenticated with an OAuth2 client-credentials Bearer token obtained from POST /oauth/token using your client_id and client_secret. Tokens are valid for about two hours and requests are rate limited to roughly two per second.
+
+
+    Grounding note: base URLs, the OAuth2 client-credentials flow, the token endpoint, the rate limit, and the resource paths below are grounded in Skydropx''s public API documentation (docs.skydropx.com and pro.skydropx.com/es-MX/api-docs). Request and response SCHEMAS are MODELED from documented fields and common shipping-API conventions and should be reconciled against the live reference before production use. A separate classic Skydropx API (https://api.skydropx.com/v1, authenticated with an `Authorization: Token token=API_KEY` header) and a Radar tracking API (https://radar-api.skydropx.com/v1) also exist and are not modeled here.'
+  version: '1.0'
+  contact:
+    name: Skydropx
+    url: https://www.skydropx.com/
+servers:
+- url: https://pro.skydropx.com/api/v1
+  description: Skydropx Pro production
+- url: https://sb-pro.skydropx.com/api/v1
+  description: Skydropx Pro sandbox
+security:
+- oauth2ClientCredentials: []
+tags:
+- name: Quotations
+  description: Multi-carrier rate quotations for a parcel.
+paths:
+  /quotations:
+    post:
+      operationId: createQuotation
+      tags:
+      - Quotations
+      summary: Create a rate quotation
+      description: Requests multi-carrier shipping rates for a parcel between an origin and destination postal code. Returns a quotation with available carrier services, prices, and delivery estimates. The chosen rate id is used to create a shipment.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuotationInput'
+      responses:
+        '201':
+          description: The created quotation with rates.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quotation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /quotations/{id}:
+    parameters:
+    - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getQuotation
+      tags:
+      - Quotations
+      summary: Retrieve a quotation
+      description: Retrieves a previously created quotation and its rates by id.
+      responses:
+        '200':
+          description: The requested quotation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quotation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    Rate:
+      type: object
+      properties:
+        id:
+          type: string
+        provider:
+          type: string
+          description: Carrier name, e.g. estafeta, fedex, dhl.
+        service_level:
+          type: string
+        total_pricing:
+          type: string
+          description: Total price for the service.
+        currency:
+          type: string
+          example: MXN
+        days:
+          type: integer
+          description: Estimated transit days.
+      additionalProperties: true
+    Quotation:
+      type: object
+      properties:
+        id:
+          type: string
+        zip_from:
+          type: string
+        zip_to:
+          type: string
+        parcel:
+          $ref: '#/components/schemas/Parcel'
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rate'
+      additionalProperties: true
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties: true
+    Parcel:
+      type: object
+      description: Parcel dimensions and weight.
+      properties:
+        length:
+          type: number
+          description: Length in centimeters.
+        width:
+          type: number
+          description: Width in centimeters.
+        height:
+          type: number
+          description: Height in centimeters.
+        weight:
+          type: number
+          description: Weight in kilograms.
+    QuotationInput:
+      type: object
+      required:
+      - zip_from
+      - zip_to
+      - parcel
+      properties:
+        zip_from:
+          type: string
+          description: Origin postal code.
+        zip_to:
+          type: string
+          description: Destination postal code.
+        parcel:
+          $ref: '#/components/schemas/Parcel'
+        carriers:
+          type: array
+          description: Optional list of carriers to restrict the quote to.
+          items:
+            type: string
+      additionalProperties: true
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier of the resource.
+      schema:
+        type: string
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    oauth2ClientCredentials:
+      type: oauth2
+      description: 'OAuth2 client-credentials flow. Exchange client_id and client_secret at POST /oauth/token for a Bearer access token, sent as `Authorization: Bearer ACCESS_TOKEN`. Tokens last about two hours.'
+      flows:
+        clientCredentials:
+          tokenUrl: https://pro.skydropx.com/api/v1/oauth/token
+          scopes: {}
