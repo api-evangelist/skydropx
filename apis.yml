@@ -12,7 +12,20 @@ description: Skydropx is a Mexican multi-carrier shipping and logistics platform
   authenticated with an API key Token header) and a Radar tracking API also exist.
   Billing is prepaid - the platform is free to use and you pay per label from a
   wallet balance.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/skydropx.png
 tags:
 - Shipping
 - Logistics
@@ -29,155 +42,132 @@ created: '2026-07-12'
 modified: '2026-07-12'
 specificationVersion: '0.19'
 apis:
-- aid: skydropx:skydropx-quotations-api
-  name: Skydropx Quotations API
-  tags:
-  - Quotations
-  - Rates
-  - Carriers
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://pro.skydropx.com/es-MX/api-docs
-  baseURL: https://pro.skydropx.com/api/v1
-  properties:
-  - url: https://docs.skydropx.com/
-    type: Documentation
-  - url: https://pro.skydropx.com/es-MX/api-docs
-    type: APIReference
-  - url: openapi/skydropx-openapi.yml
-    type: OpenAPI
-  description: Request multi-carrier shipping rates for a parcel between an origin and
-    destination. A quotation returns available carrier services with prices and
-    delivery estimates; the chosen rate is then used to create a shipment.
-- aid: skydropx:skydropx-shipments-api
-  name: Skydropx Shipments API
-  tags:
-  - Shipments
-  - Labels
-  - Fulfillment
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://pro.skydropx.com/es-MX/api-docs
-  baseURL: https://pro.skydropx.com/api/v1
-  properties:
-  - url: https://docs.skydropx.com/
-    type: Documentation
-  - url: https://pro.skydropx.com/es-MX/api-docs
-    type: APIReference
-  - url: openapi/skydropx-openapi.yml
-    type: OpenAPI
-  description: Create shipments from a quotation and rate, list and retrieve shipments,
-    cancel shipments, and add shipment protection. Creating a shipment purchases the
-    label and debits the account wallet balance.
-- aid: skydropx:skydropx-orders-labels-api
-  name: Skydropx Orders and Labels API
-  tags:
-  - Orders
-  - Labels
-  - Printing
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://pro.skydropx.com/es-MX/api-docs
-  baseURL: https://pro.skydropx.com/api/v1
-  properties:
-  - url: https://docs.skydropx.com/
-    type: Documentation
-  - url: https://pro.skydropx.com/es-MX/api-docs
-    type: APIReference
-  - url: openapi/skydropx-openapi.yml
-    type: OpenAPI
-  description: Create, list, retrieve, and update orders, and fetch the generated
-    shipping label URLs (PDF) for an order. Printing formats can be configured per
-    account.
-- aid: skydropx:skydropx-pickups-api
-  name: Skydropx Pickups API
-  tags:
-  - Pickups
-  - Recolecciones
-  - Scheduling
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://pro.skydropx.com/es-MX/api-docs
-  baseURL: https://pro.skydropx.com/api/v1
-  properties:
-  - url: https://docs.skydropx.com/
-    type: Documentation
-  - url: https://pro.skydropx.com/es-MX/api-docs
-    type: APIReference
-  - url: openapi/skydropx-openapi.yml
-    type: OpenAPI
-  description: Schedule, list, retrieve, and reschedule carrier pickups (recolecciones)
-    for created shipments, and check pickup date availability by coverage.
 - aid: skydropx:skydropx-address-templates-api
   name: Skydropx Address Templates API
-  tags:
-  - Addresses
-  - Templates
-  - Validation
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  description: Reusable saved addresses and carrier validation.
   humanURL: https://pro.skydropx.com/es-MX/api-docs
   baseURL: https://pro.skydropx.com/api/v1
-  properties:
-  - url: https://docs.skydropx.com/
-    type: Documentation
-  - url: https://pro.skydropx.com/es-MX/api-docs
-    type: APIReference
-  - url: openapi/skydropx-openapi.yml
-    type: OpenAPI
-  description: Manage reusable saved addresses - create, list, get, update, and delete
-    address templates, and validate an address against carrier serviceability.
-- aid: skydropx:skydropx-tracking-api
-  name: Skydropx Tracking API
   tags:
-  - Tracking
-  - Status
-  - Webhooks
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  - Address Templates
+  properties:
+  - type: OpenAPI
+    url: openapi/skydropx-address-templates-api-openapi.yml
+  - type: Documentation
+    url: https://docs.skydropx.com/
+  - type: APIReference
+    url: https://pro.skydropx.com/es-MX/api-docs
+- aid: skydropx:skydropx-authentication-api
+  name: Skydropx Authentication API
+  description: OAuth2 client-credentials token issuance.
   humanURL: https://pro.skydropx.com/es-MX/api-docs
   baseURL: https://pro.skydropx.com/api/v1
-  properties:
-  - url: https://docs.skydropx.com/
-    type: Documentation
-  - url: https://pro.skydropx.com/es-MX/api-docs
-    type: APIReference
-  - url: openapi/skydropx-openapi.yml
-    type: OpenAPI
-  description: Track a shipment by tracking number and report tracking events for
-    fleet/external shipments. Status changes (created, picked up, in transit,
-    delivered, exception) are also delivered to client webhook endpoints.
-- aid: skydropx:skydropx-finance-api
-  name: Skydropx Finance API
   tags:
-  - Finance
-  - Credits
-  - Billing
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://pro.skydropx.com/es-MX/api-docs
-  baseURL: https://pro.skydropx.com/api/v1
+  - Authentication
   properties:
-  - url: https://docs.skydropx.com/
-    type: Documentation
-  - url: https://pro.skydropx.com/es-MX/api-docs
-    type: APIReference
-  - url: openapi/skydropx-openapi.yml
-    type: OpenAPI
-  description: Check the prepaid account credit balance and list extra charges /
-    surcharges applied to shipments, supporting reconciliation of pay-per-label spend.
+  - type: OpenAPI
+    url: openapi/skydropx-authentication-api-openapi.yml
+  - type: Documentation
+    url: https://docs.skydropx.com/
+  - type: APIReference
+    url: https://pro.skydropx.com/es-MX/api-docs
 - aid: skydropx:skydropx-catalog-api
   name: Skydropx Catalog API
-  tags:
-  - Carriers
-  - Packagings
-  - Consignment Notes
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  description: Carrier services, packagings, and consignment-note codes.
   humanURL: https://pro.skydropx.com/es-MX/api-docs
   baseURL: https://pro.skydropx.com/api/v1
+  tags:
+  - Catalog
   properties:
-  - url: https://docs.skydropx.com/
-    type: Documentation
-  - url: https://pro.skydropx.com/es-MX/api-docs
-    type: APIReference
-  - url: openapi/skydropx-openapi.yml
-    type: OpenAPI
-  description: Read reference catalogs used to build shipments - available carrier
-    services, packaging type codes, office/drop-off points, and SAT Carta Porte
-    consignment-note codes required for Mexican shipping.
+  - type: OpenAPI
+    url: openapi/skydropx-catalog-api-openapi.yml
+  - type: Documentation
+    url: https://docs.skydropx.com/
+  - type: APIReference
+    url: https://pro.skydropx.com/es-MX/api-docs
+- aid: skydropx:skydropx-finance-api
+  name: Skydropx Finance API
+  description: Prepaid credit balance and extra charges.
+  humanURL: https://pro.skydropx.com/es-MX/api-docs
+  baseURL: https://pro.skydropx.com/api/v1
+  tags:
+  - Finance
+  properties:
+  - type: OpenAPI
+    url: openapi/skydropx-finance-api-openapi.yml
+  - type: Documentation
+    url: https://docs.skydropx.com/
+  - type: APIReference
+    url: https://pro.skydropx.com/es-MX/api-docs
+- aid: skydropx:skydropx-orders-and-labels-api
+  name: Skydropx Orders and Labels API
+  description: Orders and their generated shipping label URLs.
+  humanURL: https://pro.skydropx.com/es-MX/api-docs
+  baseURL: https://pro.skydropx.com/api/v1
+  tags:
+  - Orders and Labels
+  properties:
+  - type: OpenAPI
+    url: openapi/skydropx-orders-and-labels-api-openapi.yml
+  - type: Documentation
+    url: https://docs.skydropx.com/
+  - type: APIReference
+    url: https://pro.skydropx.com/es-MX/api-docs
+- aid: skydropx:skydropx-pickups-api
+  name: Skydropx Pickups API
+  description: Schedule and manage carrier pickups (recolecciones).
+  humanURL: https://pro.skydropx.com/es-MX/api-docs
+  baseURL: https://pro.skydropx.com/api/v1
+  tags:
+  - Pickups
+  properties:
+  - type: OpenAPI
+    url: openapi/skydropx-pickups-api-openapi.yml
+  - type: Documentation
+    url: https://docs.skydropx.com/
+  - type: APIReference
+    url: https://pro.skydropx.com/es-MX/api-docs
+- aid: skydropx:skydropx-quotations-api
+  name: Skydropx Quotations API
+  description: Multi-carrier rate quotations for a parcel.
+  humanURL: https://pro.skydropx.com/es-MX/api-docs
+  baseURL: https://pro.skydropx.com/api/v1
+  tags:
+  - Quotations
+  properties:
+  - type: OpenAPI
+    url: openapi/skydropx-quotations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.skydropx.com/
+  - type: APIReference
+    url: https://pro.skydropx.com/es-MX/api-docs
+- aid: skydropx:skydropx-shipments-api
+  name: Skydropx Shipments API
+  description: Create, list, retrieve, cancel, and protect shipments.
+  humanURL: https://pro.skydropx.com/es-MX/api-docs
+  baseURL: https://pro.skydropx.com/api/v1
+  tags:
+  - Shipments
+  properties:
+  - type: OpenAPI
+    url: openapi/skydropx-shipments-api-openapi.yml
+  - type: Documentation
+    url: https://docs.skydropx.com/
+  - type: APIReference
+    url: https://pro.skydropx.com/es-MX/api-docs
+- aid: skydropx:skydropx-tracking-api
+  name: Skydropx Tracking API
+  description: Track shipments and report tracking events.
+  humanURL: https://pro.skydropx.com/es-MX/api-docs
+  baseURL: https://pro.skydropx.com/api/v1
+  tags:
+  - Tracking
+  properties:
+  - type: OpenAPI
+    url: openapi/skydropx-tracking-api-openapi.yml
+  - type: Documentation
+    url: https://docs.skydropx.com/
+  - type: APIReference
+    url: https://pro.skydropx.com/es-MX/api-docs
 common:
 - type: AgenticAccess
   url: agentic-access/skydropx-agentic-access.yml
