@@ -1,0 +1,30 @@
+{
+  "provider": "skydropx",
+  "sources": [
+    "skydropx-address-templates-api-openapi.yml",
+    "skydropx-authentication-api-openapi.yml",
+    "skydropx-catalog-api-openapi.yml",
+    "skydropx-finance-api-openapi.yml",
+    "skydropx-orders-and-labels-api-openapi.yml",
+    "skydropx-pickups-api-openapi.yml",
+    "skydropx-quotations-api-openapi.yml",
+    "skydropx-shipments-api-openapi.yml",
+    "skydropx-tracking-api-openapi.yml"
+  ],
+  "outputs": [
+    "skydropx-address-templates-api-openapi.yml",
+    "skydropx-authentication-api-openapi.yml",
+    "skydropx-catalog-api-openapi.yml",
+    "skydropx-finance-api-openapi.yml",
+    "skydropx-orders-and-labels-api-openapi.yml",
+    "skydropx-pickups-api-openapi.yml",
+    "skydropx-quotations-api-openapi.yml",
+    "skydropx-shipments-api-openapi.yml",
+    "skydropx-tracking-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
