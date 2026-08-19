@@ -1,0 +1,63 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Skydropx Pro Address Templates Quotations API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://pro.skydropx.com/api/v1/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Quotations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a rate quotation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://pro.skydropx.com/api/v1/quotations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requests multi-carrier shipping rates for a parcel between an origin and destination postal code. Returns a quotation with available carrier services, prices, and delivery estimates. The chosen rate id is used to create a shipment."
+        },
+        {
+          "info": {
+            "name": "Retrieve a quotation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://pro.skydropx.com/api/v1/quotations/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the resource."
+              }
+            ]
+          },
+          "docs": "Retrieves a previously created quotation and its rates by id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

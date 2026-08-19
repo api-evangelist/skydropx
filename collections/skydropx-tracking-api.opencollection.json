@@ -1,0 +1,63 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Skydropx Pro Address Templates Tracking API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://pro.skydropx.com/api/v1/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tracking",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Track a shipment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://pro.skydropx.com/api/v1/shipments/tracking/:tracking_number",
+            "params": [
+              {
+                "name": "tracking_number",
+                "value": "",
+                "type": "path",
+                "description": "The carrier tracking number."
+              }
+            ]
+          },
+          "docs": "Retrieves the current tracking status and event history for a tracking number."
+        },
+        {
+          "info": {
+            "name": "Report a tracking event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://pro.skydropx.com/api/v1/shipments/tracking",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Reports a tracking event for a fleet or externally fulfilled shipment."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

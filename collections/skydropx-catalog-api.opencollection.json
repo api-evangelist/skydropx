@@ -1,0 +1,73 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Skydropx Pro Address Templates Catalog API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://pro.skydropx.com/api/v1/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Catalog",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List carrier services",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://pro.skydropx.com/api/v1/shipments/carrier_services"
+          },
+          "docs": "Lists the carrier services available to the account."
+        },
+        {
+          "info": {
+            "name": "List packaging codes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://pro.skydropx.com/api/v1/shipments/packagings"
+          },
+          "docs": "Lists packaging type codes usable when creating shipments."
+        },
+        {
+          "info": {
+            "name": "List consignment-note codes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://pro.skydropx.com/api/v1/shipments/consignment_notes"
+          },
+          "docs": "Lists SAT Carta Porte consignment-note codes (product classes, packaging) required for applicable Mexican shipments."
+        },
+        {
+          "info": {
+            "name": "List office / drop-off points",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://pro.skydropx.com/api/v1/office_points"
+          },
+          "docs": "Retrieves office and drop-off point locations for a carrier or rate."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
