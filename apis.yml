@@ -193,6 +193,9 @@ apis:
   - type: APIReference
     url: https://pro.skydropx.com/es-MX/api-docs
 common:
+- type: CapabilityMap
+  url: capabilities/skydropx-capability-edges.yml
+  name: Skydropx Business Capability Map
 - type: AgenticAccess
   url: agentic-access/skydropx-agentic-access.yml
 - type: DomainSecurity
