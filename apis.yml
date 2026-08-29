@@ -12,6 +12,18 @@ description: Skydropx is a Mexican multi-carrier shipping and logistics platform
   authenticated with an API key Token header) and a Radar tracking API also exist.
   Billing is prepaid - the platform is free to use and you pay per label from a
   wallet balance.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
