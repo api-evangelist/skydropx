@@ -1,10 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Skydropx Pro Address Templates Catalog API
-  description: 'The Skydropx Pro API is a REST interface for the Skydropx multi-carrier shipping and logistics platform (Mexico and Latin America). It lets you request multi-carrier rate quotations, create shipments and purchase labels, schedule carrier pickups, manage saved address templates, track parcels, and read the prepaid account credit balance. All requests are authenticated with an OAuth2 client-credentials Bearer token obtained from POST /oauth/token using your client_id and client_secret. Tokens are valid for about two hours and requests are rate limited to roughly two per second.
-
-
-    Grounding note: base URLs, the OAuth2 client-credentials flow, the token endpoint, the rate limit, and the resource paths below are grounded in Skydropx''s public API documentation (docs.skydropx.com and pro.skydropx.com/es-MX/api-docs). Request and response SCHEMAS are MODELED from documented fields and common shipping-API conventions and should be reconciled against the live reference before production use. A separate classic Skydropx API (https://api.skydropx.com/v1, authenticated with an `Authorization: Token token=API_KEY` header) and a Radar tracking API (https://radar-api.skydropx.com/v1) also exist and are not modeled here.'
+  title: Skydropx Pro Catalog API
+  description: The Skydropx Pro API is a REST interface for the Skydropx multi-carrier shipping and logistics platform (Mexico and Latin America).
   version: '1.0'
   contact:
     name: Skydropx

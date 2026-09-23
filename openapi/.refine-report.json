@@ -1,15 +1,7 @@
 {
   "provider": "skydropx",
   "sources": [
-    "skydropx-address-templates-api-openapi.yml",
-    "skydropx-authentication-api-openapi.yml",
-    "skydropx-catalog-api-openapi.yml",
-    "skydropx-finance-api-openapi.yml",
-    "skydropx-orders-and-labels-api-openapi.yml",
-    "skydropx-pickups-api-openapi.yml",
-    "skydropx-quotations-api-openapi.yml",
-    "skydropx-shipments-api-openapi.yml",
-    "skydropx-tracking-api-openapi.yml"
+    "_original/skydropx-openapi.yml"
   ],
   "outputs": [
     "skydropx-address-templates-api-openapi.yml",
@@ -25,6 +17,20 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "skydropx-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "skydropx-address-templates-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "skydropx-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "skydropx-catalog-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "skydropx-finance-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "skydropx-orders-and-labels-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "skydropx-pickups-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "skydropx-quotations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "skydropx-shipments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "skydropx-tracking-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
