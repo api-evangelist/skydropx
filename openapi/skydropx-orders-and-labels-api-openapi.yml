@@ -151,27 +151,21 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    Id:
-      name: id
-      in: path
-      required: true
-      description: The unique identifier of the resource.
-      schema:
-        type: string
   schemas:
-    Order:
-      allOf:
-      - $ref: '#/components/schemas/OrderInput'
-      - type: object
-        properties:
-          id:
-            type: string
-          status:
-            type: string
-          created_at:
-            type: string
-            format: date-time
+    Label:
+      type: object
+      properties:
+        id:
+          type: string
+        label_url:
+          type: string
+          format: uri
+        tracking_number:
+          type: string
+        format:
+          type: string
+          example: pdf
+      additionalProperties: true
     Address:
       type: object
       description: A shipping address (origin, destination, or saved template).
@@ -218,20 +212,18 @@ components:
         weight:
           type: number
           description: Weight in kilograms.
-    Label:
-      type: object
-      properties:
-        id:
-          type: string
-        label_url:
-          type: string
-          format: uri
-        tracking_number:
-          type: string
-        format:
-          type: string
-          example: pdf
-      additionalProperties: true
+    Order:
+      allOf:
+      - $ref: '#/components/schemas/OrderInput'
+      - type: object
+        properties:
+          id:
+            type: string
+          status:
+            type: string
+          created_at:
+            type: string
+            format: date-time
     Error:
       type: object
       properties:
@@ -252,6 +244,14 @@ components:
           items:
             $ref: '#/components/schemas/Parcel'
       additionalProperties: true
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier of the resource.
+      schema:
+        type: string
   securitySchemes:
     oauth2ClientCredentials:
       type: oauth2

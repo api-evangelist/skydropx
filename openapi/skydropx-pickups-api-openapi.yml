@@ -144,32 +144,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    PickupInput:
-      type: object
-      properties:
-        carrier:
-          type: string
-        date:
-          type: string
-          format: date
-        address:
-          $ref: '#/components/schemas/Address'
-        shipment_ids:
-          type: array
-          items:
-            type: string
-      additionalProperties: true
-    Pickup:
-      allOf:
-      - $ref: '#/components/schemas/PickupInput'
-      - type: object
-        properties:
-          id:
-            type: string
-          status:
-            type: string
-          confirmation_number:
-            type: string
     Address:
       type: object
       description: A shipping address (origin, destination, or saved template).
@@ -199,6 +173,32 @@ components:
           type: string
         reference:
           type: string
+      additionalProperties: true
+    Pickup:
+      allOf:
+      - $ref: '#/components/schemas/PickupInput'
+      - type: object
+        properties:
+          id:
+            type: string
+          status:
+            type: string
+          confirmation_number:
+            type: string
+    PickupInput:
+      type: object
+      properties:
+        carrier:
+          type: string
+        date:
+          type: string
+          format: date
+        address:
+          $ref: '#/components/schemas/Address'
+        shipment_ids:
+          type: array
+          items:
+            type: string
       additionalProperties: true
     Error:
       type: object

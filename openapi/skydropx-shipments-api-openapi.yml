@@ -161,41 +161,26 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    ShipmentInput:
+    Rate:
       type: object
-      required:
-      - quotation_id
-      - rate_id
-      - address_from
-      - address_to
       properties:
-        quotation_id:
+        id:
           type: string
-        rate_id:
+        provider:
           type: string
-        address_from:
-          $ref: '#/components/schemas/Address'
-        address_to:
-          $ref: '#/components/schemas/Address'
-        parcels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Parcel'
-        consignment_note_class_code:
+          description: Carrier name, e.g. estafeta, fedex, dhl.
+        service_level:
           type: string
-          description: SAT product classification code (Carta Porte).
-        consignment_note_packaging_code:
+        total_pricing:
           type: string
-          description: SAT packaging code (Carta Porte).
+          description: Total price for the service.
+        currency:
+          type: string
+          example: MXN
+        days:
+          type: integer
+          description: Estimated transit days.
       additionalProperties: true
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        errors:
-          type: object
-          additionalProperties: true
     Address:
       type: object
       description: A shipping address (origin, destination, or saved template).
@@ -242,25 +227,32 @@ components:
         weight:
           type: number
           description: Weight in kilograms.
-    Rate:
+    ShipmentInput:
       type: object
+      required:
+      - quotation_id
+      - rate_id
+      - address_from
+      - address_to
       properties:
-        id:
+        quotation_id:
           type: string
-        provider:
+        rate_id:
           type: string
-          description: Carrier name, e.g. estafeta, fedex, dhl.
-        service_level:
+        address_from:
+          $ref: '#/components/schemas/Address'
+        address_to:
+          $ref: '#/components/schemas/Address'
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parcel'
+        consignment_note_class_code:
           type: string
-        total_pricing:
+          description: SAT product classification code (Carta Porte).
+        consignment_note_packaging_code:
           type: string
-          description: Total price for the service.
-        currency:
-          type: string
-          example: MXN
-        days:
-          type: integer
-          description: Estimated transit days.
+          description: SAT packaging code (Carta Porte).
       additionalProperties: true
     Shipment:
       type: object
@@ -284,6 +276,14 @@ components:
           type: string
           format: date-time
       additionalProperties: true
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties: true
   parameters:
     Id:
       name: id

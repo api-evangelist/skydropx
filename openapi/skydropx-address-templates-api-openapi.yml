@@ -160,14 +160,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    Id:
-      name: id
-      in: path
-      required: true
-      description: The unique identifier of the resource.
-      schema:
-        type: string
   schemas:
     Address:
       type: object
@@ -207,6 +199,14 @@ components:
         errors:
           type: object
           additionalProperties: true
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier of the resource.
+      schema:
+        type: string
   securitySchemes:
     oauth2ClientCredentials:
       type: oauth2
