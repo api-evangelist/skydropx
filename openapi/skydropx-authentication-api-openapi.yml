@@ -55,14 +55,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        errors:
-          type: object
-          additionalProperties: true
     AccessToken:
       type: object
       properties:
@@ -76,6 +68,14 @@ components:
           description: Token lifetime in seconds (about 7200).
         created_at:
           type: integer
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties: true
   responses:
     Unauthorized:
       description: Missing or invalid access token.

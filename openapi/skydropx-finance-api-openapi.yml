@@ -63,14 +63,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        errors:
-          type: object
-          additionalProperties: true
     Credits:
       type: object
       properties:
@@ -81,6 +73,14 @@ components:
           type: string
           example: MXN
       additionalProperties: true
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties: true
   responses:
     Unauthorized:
       description: Missing or invalid access token.

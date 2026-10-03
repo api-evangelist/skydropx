@@ -124,26 +124,33 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  responses:
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid access token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Pickup:
+      allOf:
+      - $ref: '#/components/schemas/PickupInput'
+      - type: object
+        properties:
+          id:
+            type: string
+          status:
+            type: string
+          confirmation_number:
+            type: string
+    PickupInput:
+      type: object
+      properties:
+        carrier:
+          type: string
+        date:
+          type: string
+          format: date
+        address:
+          $ref: '#/components/schemas/Address'
+        shipment_ids:
+          type: array
+          items:
+            type: string
+      additionalProperties: true
     Address:
       type: object
       description: A shipping address (origin, destination, or saved template).
@@ -174,32 +181,6 @@ components:
         reference:
           type: string
       additionalProperties: true
-    Pickup:
-      allOf:
-      - $ref: '#/components/schemas/PickupInput'
-      - type: object
-        properties:
-          id:
-            type: string
-          status:
-            type: string
-          confirmation_number:
-            type: string
-    PickupInput:
-      type: object
-      properties:
-        carrier:
-          type: string
-        date:
-          type: string
-          format: date
-        address:
-          $ref: '#/components/schemas/Address'
-        shipment_ids:
-          type: array
-          items:
-            type: string
-      additionalProperties: true
     Error:
       type: object
       properties:
@@ -208,6 +189,25 @@ components:
         errors:
           type: object
           additionalProperties: true
+  responses:
+    Unauthorized:
+      description: Missing or invalid access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     Id:
       name: id

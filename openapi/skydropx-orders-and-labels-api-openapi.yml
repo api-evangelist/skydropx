@@ -132,13 +132,15 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier of the resource.
+      schema:
+        type: string
   responses:
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Missing or invalid access token.
       content:
@@ -151,7 +153,29 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    Parcel:
+      type: object
+      description: Parcel dimensions and weight.
+      properties:
+        length:
+          type: number
+          description: Length in centimeters.
+        width:
+          type: number
+          description: Width in centimeters.
+        height:
+          type: number
+          description: Height in centimeters.
+        weight:
+          type: number
+          description: Weight in kilograms.
     Label:
       type: object
       properties:
@@ -165,6 +189,30 @@ components:
         format:
           type: string
           example: pdf
+      additionalProperties: true
+    Order:
+      allOf:
+      - $ref: '#/components/schemas/OrderInput'
+      - type: object
+        properties:
+          id:
+            type: string
+          status:
+            type: string
+          created_at:
+            type: string
+            format: date-time
+    OrderInput:
+      type: object
+      properties:
+        reference:
+          type: string
+        address_to:
+          $ref: '#/components/schemas/Address'
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parcel'
       additionalProperties: true
     Address:
       type: object
@@ -196,34 +244,6 @@ components:
         reference:
           type: string
       additionalProperties: true
-    Parcel:
-      type: object
-      description: Parcel dimensions and weight.
-      properties:
-        length:
-          type: number
-          description: Length in centimeters.
-        width:
-          type: number
-          description: Width in centimeters.
-        height:
-          type: number
-          description: Height in centimeters.
-        weight:
-          type: number
-          description: Weight in kilograms.
-    Order:
-      allOf:
-      - $ref: '#/components/schemas/OrderInput'
-      - type: object
-        properties:
-          id:
-            type: string
-          status:
-            type: string
-          created_at:
-            type: string
-            format: date-time
     Error:
       type: object
       properties:
@@ -232,26 +252,6 @@ components:
         errors:
           type: object
           additionalProperties: true
-    OrderInput:
-      type: object
-      properties:
-        reference:
-          type: string
-        address_to:
-          $ref: '#/components/schemas/Address'
-        parcels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Parcel'
-      additionalProperties: true
-  parameters:
-    Id:
-      name: id
-      in: path
-      required: true
-      description: The unique identifier of the resource.
-      schema:
-        type: string
   securitySchemes:
     oauth2ClientCredentials:
       type: oauth2

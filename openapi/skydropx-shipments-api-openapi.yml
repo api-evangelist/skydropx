@@ -141,26 +141,45 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid access token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Shipment:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        tracking_number:
+          type: string
+        label_url:
+          type: string
+          format: uri
+        rate:
+          $ref: '#/components/schemas/Rate'
+        address_from:
+          $ref: '#/components/schemas/Address'
+        address_to:
+          $ref: '#/components/schemas/Address'
+        created_at:
+          type: string
+          format: date-time
+      additionalProperties: true
+    Parcel:
+      type: object
+      description: Parcel dimensions and weight.
+      properties:
+        length:
+          type: number
+          description: Length in centimeters.
+        width:
+          type: number
+          description: Width in centimeters.
+        height:
+          type: number
+          description: Height in centimeters.
+        weight:
+          type: number
+          description: Weight in kilograms.
     Rate:
       type: object
       properties:
@@ -180,6 +199,33 @@ components:
         days:
           type: integer
           description: Estimated transit days.
+      additionalProperties: true
+    ShipmentInput:
+      type: object
+      required:
+      - quotation_id
+      - rate_id
+      - address_from
+      - address_to
+      properties:
+        quotation_id:
+          type: string
+        rate_id:
+          type: string
+        address_from:
+          $ref: '#/components/schemas/Address'
+        address_to:
+          $ref: '#/components/schemas/Address'
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parcel'
+        consignment_note_class_code:
+          type: string
+          description: SAT product classification code (Carta Porte).
+        consignment_note_packaging_code:
+          type: string
+          description: SAT packaging code (Carta Porte).
       additionalProperties: true
     Address:
       type: object
@@ -211,71 +257,6 @@ components:
         reference:
           type: string
       additionalProperties: true
-    Parcel:
-      type: object
-      description: Parcel dimensions and weight.
-      properties:
-        length:
-          type: number
-          description: Length in centimeters.
-        width:
-          type: number
-          description: Width in centimeters.
-        height:
-          type: number
-          description: Height in centimeters.
-        weight:
-          type: number
-          description: Weight in kilograms.
-    ShipmentInput:
-      type: object
-      required:
-      - quotation_id
-      - rate_id
-      - address_from
-      - address_to
-      properties:
-        quotation_id:
-          type: string
-        rate_id:
-          type: string
-        address_from:
-          $ref: '#/components/schemas/Address'
-        address_to:
-          $ref: '#/components/schemas/Address'
-        parcels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Parcel'
-        consignment_note_class_code:
-          type: string
-          description: SAT product classification code (Carta Porte).
-        consignment_note_packaging_code:
-          type: string
-          description: SAT packaging code (Carta Porte).
-      additionalProperties: true
-    Shipment:
-      type: object
-      properties:
-        id:
-          type: string
-        status:
-          type: string
-        tracking_number:
-          type: string
-        label_url:
-          type: string
-          format: uri
-        rate:
-          $ref: '#/components/schemas/Rate'
-        address_from:
-          $ref: '#/components/schemas/Address'
-        address_to:
-          $ref: '#/components/schemas/Address'
-        created_at:
-          type: string
-          format: date-time
-      additionalProperties: true
     Error:
       type: object
       properties:
@@ -284,6 +265,25 @@ components:
         errors:
           type: object
           additionalProperties: true
+  responses:
+    Unauthorized:
+      description: Missing or invalid access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     Id:
       name: id
