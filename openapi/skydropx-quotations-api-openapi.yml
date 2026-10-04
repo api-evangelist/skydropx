@@ -71,6 +71,12 @@ components:
       schema:
         type: string
   responses:
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Missing or invalid access token.
       content:
@@ -83,13 +89,23 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Quotation:
+      type: object
+      properties:
+        id:
+          type: string
+        zip_from:
+          type: string
+        zip_to:
+          type: string
+        parcel:
+          $ref: '#/components/schemas/Parcel'
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rate'
+      additionalProperties: true
     Parcel:
       type: object
       description: Parcel dimensions and weight.
@@ -106,26 +122,6 @@ components:
         weight:
           type: number
           description: Weight in kilograms.
-    Rate:
-      type: object
-      properties:
-        id:
-          type: string
-        provider:
-          type: string
-          description: Carrier name, e.g. estafeta, fedex, dhl.
-        service_level:
-          type: string
-        total_pricing:
-          type: string
-          description: Total price for the service.
-        currency:
-          type: string
-          example: MXN
-        days:
-          type: integer
-          description: Estimated transit days.
-      additionalProperties: true
     QuotationInput:
       type: object
       required:
@@ -147,22 +143,6 @@ components:
           items:
             type: string
       additionalProperties: true
-    Quotation:
-      type: object
-      properties:
-        id:
-          type: string
-        zip_from:
-          type: string
-        zip_to:
-          type: string
-        parcel:
-          $ref: '#/components/schemas/Parcel'
-        rates:
-          type: array
-          items:
-            $ref: '#/components/schemas/Rate'
-      additionalProperties: true
     Error:
       type: object
       properties:
@@ -171,6 +151,26 @@ components:
         errors:
           type: object
           additionalProperties: true
+    Rate:
+      type: object
+      properties:
+        id:
+          type: string
+        provider:
+          type: string
+          description: Carrier name, e.g. estafeta, fedex, dhl.
+        service_level:
+          type: string
+        total_pricing:
+          type: string
+          description: Total price for the service.
+        currency:
+          type: string
+          example: MXN
+        days:
+          type: integer
+          description: Estimated transit days.
+      additionalProperties: true
   securitySchemes:
     oauth2ClientCredentials:
       type: oauth2

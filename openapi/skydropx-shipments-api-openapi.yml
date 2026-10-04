@@ -142,6 +142,33 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    ShipmentInput:
+      type: object
+      required:
+      - quotation_id
+      - rate_id
+      - address_from
+      - address_to
+      properties:
+        quotation_id:
+          type: string
+        rate_id:
+          type: string
+        address_from:
+          $ref: '#/components/schemas/Address'
+        address_to:
+          $ref: '#/components/schemas/Address'
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parcel'
+        consignment_note_class_code:
+          type: string
+          description: SAT product classification code (Carta Porte).
+        consignment_note_packaging_code:
+          type: string
+          description: SAT packaging code (Carta Porte).
+      additionalProperties: true
     Shipment:
       type: object
       properties:
@@ -180,53 +207,6 @@ components:
         weight:
           type: number
           description: Weight in kilograms.
-    Rate:
-      type: object
-      properties:
-        id:
-          type: string
-        provider:
-          type: string
-          description: Carrier name, e.g. estafeta, fedex, dhl.
-        service_level:
-          type: string
-        total_pricing:
-          type: string
-          description: Total price for the service.
-        currency:
-          type: string
-          example: MXN
-        days:
-          type: integer
-          description: Estimated transit days.
-      additionalProperties: true
-    ShipmentInput:
-      type: object
-      required:
-      - quotation_id
-      - rate_id
-      - address_from
-      - address_to
-      properties:
-        quotation_id:
-          type: string
-        rate_id:
-          type: string
-        address_from:
-          $ref: '#/components/schemas/Address'
-        address_to:
-          $ref: '#/components/schemas/Address'
-        parcels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Parcel'
-        consignment_note_class_code:
-          type: string
-          description: SAT product classification code (Carta Porte).
-        consignment_note_packaging_code:
-          type: string
-          description: SAT packaging code (Carta Porte).
-      additionalProperties: true
     Address:
       type: object
       description: A shipping address (origin, destination, or saved template).
@@ -265,7 +245,41 @@ components:
         errors:
           type: object
           additionalProperties: true
+    Rate:
+      type: object
+      properties:
+        id:
+          type: string
+        provider:
+          type: string
+          description: Carrier name, e.g. estafeta, fedex, dhl.
+        service_level:
+          type: string
+        total_pricing:
+          type: string
+          description: Total price for the service.
+        currency:
+          type: string
+          example: MXN
+        days:
+          type: integer
+          description: Estimated transit days.
+      additionalProperties: true
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier of the resource.
+      schema:
+        type: string
   responses:
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Missing or invalid access token.
       content:
@@ -278,20 +292,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    Id:
-      name: id
-      in: path
-      required: true
-      description: The unique identifier of the resource.
-      schema:
-        type: string
   securitySchemes:
     oauth2ClientCredentials:
       type: oauth2

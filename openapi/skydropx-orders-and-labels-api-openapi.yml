@@ -141,6 +141,12 @@ components:
       schema:
         type: string
   responses:
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Missing or invalid access token.
       content:
@@ -153,13 +159,31 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    OrderInput:
+      type: object
+      properties:
+        reference:
+          type: string
+        address_to:
+          $ref: '#/components/schemas/Address'
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parcel'
+      additionalProperties: true
+    Order:
+      allOf:
+      - $ref: '#/components/schemas/OrderInput'
+      - type: object
+        properties:
+          id:
+            type: string
+          status:
+            type: string
+          created_at:
+            type: string
+            format: date-time
     Parcel:
       type: object
       description: Parcel dimensions and weight.
@@ -176,44 +200,6 @@ components:
         weight:
           type: number
           description: Weight in kilograms.
-    Label:
-      type: object
-      properties:
-        id:
-          type: string
-        label_url:
-          type: string
-          format: uri
-        tracking_number:
-          type: string
-        format:
-          type: string
-          example: pdf
-      additionalProperties: true
-    Order:
-      allOf:
-      - $ref: '#/components/schemas/OrderInput'
-      - type: object
-        properties:
-          id:
-            type: string
-          status:
-            type: string
-          created_at:
-            type: string
-            format: date-time
-    OrderInput:
-      type: object
-      properties:
-        reference:
-          type: string
-        address_to:
-          $ref: '#/components/schemas/Address'
-        parcels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Parcel'
-      additionalProperties: true
     Address:
       type: object
       description: A shipping address (origin, destination, or saved template).
@@ -243,6 +229,20 @@ components:
           type: string
         reference:
           type: string
+      additionalProperties: true
+    Label:
+      type: object
+      properties:
+        id:
+          type: string
+        label_url:
+          type: string
+          format: uri
+        tracking_number:
+          type: string
+        format:
+          type: string
+          example: pdf
       additionalProperties: true
     Error:
       type: object
