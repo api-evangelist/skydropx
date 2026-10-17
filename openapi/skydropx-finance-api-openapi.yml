@@ -70,14 +70,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        errors:
-          type: object
-          additionalProperties: true
     Credits:
       type: object
       properties:
@@ -88,6 +80,14 @@ components:
           type: string
           example: MXN
       additionalProperties: true
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties: true
   securitySchemes:
     oauth2ClientCredentials:
       type: oauth2

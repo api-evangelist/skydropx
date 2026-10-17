@@ -132,46 +132,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    Id:
-      name: id
-      in: path
-      required: true
-      description: The unique identifier of the resource.
-      schema:
-        type: string
-  responses:
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid access token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    OrderInput:
-      type: object
-      properties:
-        reference:
-          type: string
-        address_to:
-          $ref: '#/components/schemas/Address'
-        parcels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Parcel'
-      additionalProperties: true
     Order:
       allOf:
       - $ref: '#/components/schemas/OrderInput'
@@ -184,22 +145,40 @@ components:
           created_at:
             type: string
             format: date-time
-    Parcel:
+    Error:
       type: object
-      description: Parcel dimensions and weight.
       properties:
-        length:
-          type: number
-          description: Length in centimeters.
-        width:
-          type: number
-          description: Width in centimeters.
-        height:
-          type: number
-          description: Height in centimeters.
-        weight:
-          type: number
-          description: Weight in kilograms.
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties: true
+    Label:
+      type: object
+      properties:
+        id:
+          type: string
+        label_url:
+          type: string
+          format: uri
+        tracking_number:
+          type: string
+        format:
+          type: string
+          example: pdf
+      additionalProperties: true
+    OrderInput:
+      type: object
+      properties:
+        reference:
+          type: string
+        address_to:
+          $ref: '#/components/schemas/Address'
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parcel'
+      additionalProperties: true
     Address:
       type: object
       description: A shipping address (origin, destination, or saved template).
@@ -230,28 +209,49 @@ components:
         reference:
           type: string
       additionalProperties: true
-    Label:
+    Parcel:
       type: object
+      description: Parcel dimensions and weight.
       properties:
-        id:
-          type: string
-        label_url:
-          type: string
-          format: uri
-        tracking_number:
-          type: string
-        format:
-          type: string
-          example: pdf
-      additionalProperties: true
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        errors:
-          type: object
-          additionalProperties: true
+        length:
+          type: number
+          description: Length in centimeters.
+        width:
+          type: number
+          description: Width in centimeters.
+        height:
+          type: number
+          description: Height in centimeters.
+        weight:
+          type: number
+          description: Weight in kilograms.
+  responses:
+    Unauthorized:
+      description: Missing or invalid access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier of the resource.
+      schema:
+        type: string
   securitySchemes:
     oauth2ClientCredentials:
       type: oauth2

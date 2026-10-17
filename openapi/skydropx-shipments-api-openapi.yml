@@ -142,71 +142,34 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    ShipmentInput:
-      type: object
-      required:
-      - quotation_id
-      - rate_id
-      - address_from
-      - address_to
-      properties:
-        quotation_id:
-          type: string
-        rate_id:
-          type: string
-        address_from:
-          $ref: '#/components/schemas/Address'
-        address_to:
-          $ref: '#/components/schemas/Address'
-        parcels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Parcel'
-        consignment_note_class_code:
-          type: string
-          description: SAT product classification code (Carta Porte).
-        consignment_note_packaging_code:
-          type: string
-          description: SAT packaging code (Carta Porte).
-      additionalProperties: true
-    Shipment:
+    Rate:
       type: object
       properties:
         id:
           type: string
-        status:
+        provider:
           type: string
-        tracking_number:
+          description: Carrier name, e.g. estafeta, fedex, dhl.
+        service_level:
           type: string
-        label_url:
+        total_pricing:
           type: string
-          format: uri
-        rate:
-          $ref: '#/components/schemas/Rate'
-        address_from:
-          $ref: '#/components/schemas/Address'
-        address_to:
-          $ref: '#/components/schemas/Address'
-        created_at:
+          description: Total price for the service.
+        currency:
           type: string
-          format: date-time
+          example: MXN
+        days:
+          type: integer
+          description: Estimated transit days.
       additionalProperties: true
-    Parcel:
+    Error:
       type: object
-      description: Parcel dimensions and weight.
       properties:
-        length:
-          type: number
-          description: Length in centimeters.
-        width:
-          type: number
-          description: Width in centimeters.
-        height:
-          type: number
-          description: Height in centimeters.
-        weight:
-          type: number
-          description: Weight in kilograms.
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties: true
     Address:
       type: object
       description: A shipping address (origin, destination, or saved template).
@@ -237,33 +200,70 @@ components:
         reference:
           type: string
       additionalProperties: true
-    Error:
+    ShipmentInput:
       type: object
+      required:
+      - quotation_id
+      - rate_id
+      - address_from
+      - address_to
       properties:
-        message:
+        quotation_id:
           type: string
-        errors:
-          type: object
-          additionalProperties: true
-    Rate:
+        rate_id:
+          type: string
+        address_from:
+          $ref: '#/components/schemas/Address'
+        address_to:
+          $ref: '#/components/schemas/Address'
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parcel'
+        consignment_note_class_code:
+          type: string
+          description: SAT product classification code (Carta Porte).
+        consignment_note_packaging_code:
+          type: string
+          description: SAT packaging code (Carta Porte).
+      additionalProperties: true
+    Parcel:
+      type: object
+      description: Parcel dimensions and weight.
+      properties:
+        length:
+          type: number
+          description: Length in centimeters.
+        width:
+          type: number
+          description: Width in centimeters.
+        height:
+          type: number
+          description: Height in centimeters.
+        weight:
+          type: number
+          description: Weight in kilograms.
+    Shipment:
       type: object
       properties:
         id:
           type: string
-        provider:
+        status:
           type: string
-          description: Carrier name, e.g. estafeta, fedex, dhl.
-        service_level:
+        tracking_number:
           type: string
-        total_pricing:
+        label_url:
           type: string
-          description: Total price for the service.
-        currency:
+          format: uri
+        rate:
+          $ref: '#/components/schemas/Rate'
+        address_from:
+          $ref: '#/components/schemas/Address'
+        address_to:
+          $ref: '#/components/schemas/Address'
+        created_at:
           type: string
-          example: MXN
-        days:
-          type: integer
-          description: Estimated transit days.
+          format: date-time
       additionalProperties: true
   parameters:
     Id:
@@ -274,8 +274,8 @@ components:
       schema:
         type: string
   responses:
-    ValidationError:
-      description: The request payload failed validation.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/json:
           schema:
@@ -286,8 +286,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
+    ValidationError:
+      description: The request payload failed validation.
       content:
         application/json:
           schema:

@@ -124,26 +124,30 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  parameters:
-    Id:
-      name: id
-      in: path
-      required: true
-      description: The unique identifier of the resource.
-      schema:
-        type: string
   schemas:
-    Pickup:
-      allOf:
-      - $ref: '#/components/schemas/PickupInput'
-      - type: object
-        properties:
-          id:
+    PickupInput:
+      type: object
+      properties:
+        carrier:
+          type: string
+        date:
+          type: string
+          format: date
+        address:
+          $ref: '#/components/schemas/Address'
+        shipment_ids:
+          type: array
+          items:
             type: string
-          status:
-            type: string
-          confirmation_number:
-            type: string
+      additionalProperties: true
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties: true
     Address:
       type: object
       description: A shipping address (origin, destination, or saved template).
@@ -174,36 +178,18 @@ components:
         reference:
           type: string
       additionalProperties: true
-    PickupInput:
-      type: object
-      properties:
-        carrier:
-          type: string
-        date:
-          type: string
-          format: date
-        address:
-          $ref: '#/components/schemas/Address'
-        shipment_ids:
-          type: array
-          items:
+    Pickup:
+      allOf:
+      - $ref: '#/components/schemas/PickupInput'
+      - type: object
+        properties:
+          id:
             type: string
-      additionalProperties: true
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        errors:
-          type: object
-          additionalProperties: true
+          status:
+            type: string
+          confirmation_number:
+            type: string
   responses:
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Missing or invalid access token.
       content:
@@ -216,6 +202,20 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier of the resource.
+      schema:
+        type: string
   securitySchemes:
     oauth2ClientCredentials:
       type: oauth2
