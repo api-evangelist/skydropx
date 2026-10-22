@@ -16,9 +16,29 @@ edges:
   detected: '2026-10-15'
   detected_by: mirror-platform-listings.py
   category: WordPress plugin
+- partner_name: Wix (own)
+  partner: wix
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.wix.com/app-market/developer/skydropx
+  mirror_of: wix/integrations/wix-integration-edges.yml
+  apps:
+  - Skydropx
+  listing_count: 1
+  detected: '2026-10-22'
+  detected_by: mirror-platform-listings.py
+  category: Shipping & Delivery
+  publisher_verified:
+  - Verified by Wix
 generated: '2026-10-15'
 method: searched
 checked:
 - wordpress/integrations/wordpress-integration-edges.yml
+- wix/integrations/wix-integration-edges.yml
 source:
 - wordpress/integrations/wordpress-integration-edges.yml
