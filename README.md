@@ -1,4 +1,4 @@
-# Skydropx (skydropx)
+# Skydropx
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,223 +64,140 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Skydropx is a Mexican multi-carrier shipping and logistics platform that lets e-commerce sellers and businesses compare rates, generate labels, schedule pickups, and track parcels across national and international carriers from a single API.
+Skydropx is a Mexican multi-carrier shipping and logistics platform that lets e-commerce sellers and businesses compare rates, generate labels, schedule pickups, and track parcels across national and international carriers from a single API. Its modern Skydropx Pro API (base https://pro.skydropx.com/api/v1) is a REST interface secured with OAuth2 client-credentials Bearer tokens and covers quotations, shipments, labels/orders, pickups, address templates, tracking, and account credit balances. A separate classic Skydropx API (https://api.skydropx.com/v1, authenticated with an API key Token header) and a Radar tracking API also exist. Billing is prepaid - the platform is free to use and you pay per label from a wallet balance.
 
-## Access Model (Honest Summary)
+**Areas:** Shipping · Logistics · Multi-Carrier · Mexico · Latin America · Labels · Rates · Parcel · Tracking · Fulfillment · Software-as-a-Service
 
-Skydropx is a proprietary SaaS platform (not open source). There are effectively three documented public REST surfaces, all request/response over HTTPS:
+## Skydropx on APIs.io
 
-- **Skydropx Pro API** — base `https://pro.skydropx.com/api/v1` (sandbox `https://sb-pro.skydropx.com/api/v1`). Authenticated with an **OAuth2 client-credentials Bearer token** obtained from `POST /oauth/token` using your `client_id` and `client_secret`. Tokens last about two hours; requests are rate limited to roughly two per second. This is the surface modeled in `openapi/skydropx-openapi.yml` and the collections.
-- **Classic Skydropx API** — base `https://api.skydropx.com/v1`. Authenticated with an **API key** passed as `Authorization: Token token=YOUR_API_KEY` (keys issued by Skydropx support on request). Documented but not modeled here.
-- **Radar tracking API** — base `https://radar-api.skydropx.com/v1`. Shipments and tracking. Documented but not modeled here.
+Everything profiled for Skydropx is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/skydropx/](https://apis.io/providers/skydropx/)** — or go straight to one of the APIs or properties below.
 
-Billing is **prepaid pay-per-label**: the platform and API are free to use, and you are charged the cost of each label (plus carrier surcharges) from a wallet balance readable via `GET /finance/credits`.
+### APIs (9)
 
-**Grounding note:** base URLs, the OAuth2 flow, the token endpoint, the ~2 req/sec rate limit, and the resource paths are grounded in Skydropx's public documentation. Request/response **schemas** in the OpenAPI are **modeled** from documented fields and common shipping-API conventions and should be reconciled against the live reference before production use. There is **no documented public WebSocket (`wss://`) API**; asynchronous shipment status updates are delivered to client **webhook** endpoints via HTTP POST.
+- [Skydropx Address Templates API](https://apis.io/apis/skydropx/skydropx-address-templates-api/) — Reusable saved addresses and carrier validation.
+- [Skydropx Authentication API](https://apis.io/apis/skydropx/skydropx-authentication-api/) — OAuth2 client-credentials token issuance.
+- [Skydropx Catalog API](https://apis.io/apis/skydropx/skydropx-catalog-api/) — Carrier services, packagings, and consignment-note codes.
+- [Skydropx Finance API](https://apis.io/apis/skydropx/skydropx-finance-api/) — Prepaid credit balance and extra charges.
+- [Skydropx Orders and Labels API](https://apis.io/apis/skydropx/skydropx-orders-and-labels-api/) — Orders and their generated shipping label URLs.
+- [Skydropx Pickups API](https://apis.io/apis/skydropx/skydropx-pickups-api/) — Schedule and manage carrier pickups (recolecciones).
+- [Skydropx Quotations API](https://apis.io/apis/skydropx/skydropx-quotations-api/) — Multi-carrier rate quotations for a parcel.
+- [Skydropx Shipments API](https://apis.io/apis/skydropx/skydropx-shipments-api/) — Create, list, retrieve, cancel, and protect shipments.
+- [Skydropx Tracking API](https://apis.io/apis/skydropx/skydropx-tracking-api/) — Track shipments and report tracking events.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/skydropx/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/skydropx/refs/heads/main/apis.yml)
+### Published properties
 
-## Tags
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-- Shipping
-- Logistics
-- Multi-Carrier
-- Mexico
-- Latin America
-- Labels
-- Rates
-- Parcels
-- Tracking
-- Fulfillment
-- SaaS
+#### MCP servers (1)
 
-## Timestamps
+Model Context Protocol servers that expose the API to agents.
 
-- **Created:** 2026-07-12
-- **Modified:** 2026-07-12
+- [skydropx](https://apis.io/servers/skydropx/skydropx/)
 
-## APIs
+#### Agentic access (1)
 
-### Skydropx Quotations API
+Which operations an agent can call, which act, and which need a human in the loop.
 
-Request multi-carrier shipping rates for a parcel between an origin and destination. A quotation returns available carrier services with prices and delivery estimates; the chosen rate is then used to create a shipment.
+- [Skydropx Agentic Access](https://apis.io/agentic-access/skydropx/skydropx-agentic-access/)
 
-- **Human URL:** [https://pro.skydropx.com/es-MX/api-docs](https://pro.skydropx.com/es-MX/api-docs)
-- **Base URL:** `https://pro.skydropx.com/api/v1`
+#### Collections (10)
 
-#### Tags
+Postman and Open Collection request collections.
 
-- Quotations
-- Rates
-- Carriers
+- [Skydropx Pro API](https://apis.io/collections/skydropx/open-skydropx/)
+- [Skydropx Pro Address Templates API](https://apis.io/collections/skydropx/open-skydropx-address-templates-api/)
+- [Skydropx Pro Address Templates Authentication API](https://apis.io/collections/skydropx/open-skydropx-authentication-api/)
+- [Skydropx Pro Address Templates Catalog API](https://apis.io/collections/skydropx/open-skydropx-catalog-api/)
+- [Skydropx Pro Address Templates Finance API](https://apis.io/collections/skydropx/open-skydropx-finance-api/)
+- [Skydropx Pro Address Templates Orders and Labels API](https://apis.io/collections/skydropx/open-skydropx-orders-and-labels-api/)
+- [Skydropx Pro Address Templates Pickups API](https://apis.io/collections/skydropx/open-skydropx-pickups-api/)
+- [Skydropx Pro Address Templates Quotations API](https://apis.io/collections/skydropx/open-skydropx-quotations-api/)
+- [Skydropx Pro Address Templates Shipments API](https://apis.io/collections/skydropx/open-skydropx-shipments-api/)
+- [Skydropx Pro Address Templates Tracking API](https://apis.io/collections/skydropx/open-skydropx-tracking-api/)
 
-#### Properties
+#### Security (2)
 
-- [Documentation](https://docs.skydropx.com/)
-- [API Reference](https://pro.skydropx.com/es-MX/api-docs)
-- [OpenAPI](openapi/skydropx-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/skydropx.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/skydropx.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Authentication, trust centre, and vulnerability disclosure.
 
-### Skydropx Shipments API
+- [Skydropx Authentication](https://apis.io/security/skydropx/skydropx-authentication/)
+- [Skydropx Domain Security](https://apis.io/security/skydropx/skydropx-domain-security/)
 
-Create shipments from a quotation and rate, list and retrieve shipments, cancel shipments, and add shipment protection. Creating a shipment purchases the label and debits the account wallet balance.
+#### Plans and pricing (1)
 
-- **Human URL:** [https://pro.skydropx.com/es-MX/api-docs](https://pro.skydropx.com/es-MX/api-docs)
-- **Base URL:** `https://pro.skydropx.com/api/v1`
+Published plans, tiers and prices.
 
-#### Tags
+- [Skydropx Plans Pricing](https://apis.io/plans/skydropx/skydropx-plans-pricing/)
 
-- Shipments
-- Labels
-- Fulfillment
+#### Rate limits (1)
 
-#### Properties
+Published request limits.
 
-- [Documentation](https://docs.skydropx.com/)
-- [API Reference](https://pro.skydropx.com/es-MX/api-docs)
-- [OpenAPI](openapi/skydropx-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/skydropx.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/skydropx.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Skydropx Rate Limits](https://apis.io/rate-limits/skydropx/skydropx-rate-limits/)
 
-### Skydropx Orders and Labels API
+#### FinOps (1)
 
-Create, list, retrieve, and update orders, and fetch the generated shipping label URLs (PDF) for an order. Printing formats can be configured per account.
+What the API costs to run, by operation.
 
-- **Human URL:** [https://pro.skydropx.com/es-MX/api-docs](https://pro.skydropx.com/es-MX/api-docs)
-- **Base URL:** `https://pro.skydropx.com/api/v1`
+- [Skydropx Finops](https://apis.io/finops/skydropx/skydropx-finops/)
 
-#### Tags
+## Where to find this API
 
-- Orders
-- Labels
-- Printing
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-#### Properties
-
-- [Documentation](https://docs.skydropx.com/)
-- [API Reference](https://pro.skydropx.com/es-MX/api-docs)
-- [OpenAPI](openapi/skydropx-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/skydropx.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/skydropx.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Skydropx Pickups API
-
-Schedule, list, retrieve, and reschedule carrier pickups (recolecciones) for created shipments, and check pickup date availability by coverage.
-
-- **Human URL:** [https://pro.skydropx.com/es-MX/api-docs](https://pro.skydropx.com/es-MX/api-docs)
-- **Base URL:** `https://pro.skydropx.com/api/v1`
-
-#### Tags
-
-- Pickups
-- Recolecciones
-- Scheduling
-
-#### Properties
-
-- [Documentation](https://docs.skydropx.com/)
-- [API Reference](https://pro.skydropx.com/es-MX/api-docs)
-- [OpenAPI](openapi/skydropx-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/skydropx.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/skydropx.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Skydropx Address Templates API
-
-Manage reusable saved addresses - create, list, get, update, and delete address templates, and validate an address against carrier serviceability.
-
-- **Human URL:** [https://pro.skydropx.com/es-MX/api-docs](https://pro.skydropx.com/es-MX/api-docs)
-- **Base URL:** `https://pro.skydropx.com/api/v1`
-
-#### Tags
-
-- Addresses
-- Templates
-- Validation
-
-#### Properties
-
-- [Documentation](https://docs.skydropx.com/)
-- [API Reference](https://pro.skydropx.com/es-MX/api-docs)
-- [OpenAPI](openapi/skydropx-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/skydropx.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/skydropx.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Skydropx Tracking API
-
-Track a shipment by tracking number and report tracking events for fleet/external shipments. Status changes (created, picked up, in transit, delivered, exception) are also delivered to client webhook endpoints.
-
-- **Human URL:** [https://pro.skydropx.com/es-MX/api-docs](https://pro.skydropx.com/es-MX/api-docs)
-- **Base URL:** `https://pro.skydropx.com/api/v1`
-
-#### Tags
-
-- Tracking
-- Status
-- Webhooks
-
-#### Properties
-
-- [Documentation](https://docs.skydropx.com/)
-- [API Reference](https://pro.skydropx.com/es-MX/api-docs)
-- [OpenAPI](openapi/skydropx-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/skydropx.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/skydropx.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Skydropx Finance API
-
-Check the prepaid account credit balance and list extra charges / surcharges applied to shipments, supporting reconciliation of pay-per-label spend.
-
-- **Human URL:** [https://pro.skydropx.com/es-MX/api-docs](https://pro.skydropx.com/es-MX/api-docs)
-- **Base URL:** `https://pro.skydropx.com/api/v1`
-
-#### Tags
-
-- Finance
-- Credits
-- Billing
-
-#### Properties
-
-- [Documentation](https://docs.skydropx.com/)
-- [API Reference](https://pro.skydropx.com/es-MX/api-docs)
-- [OpenAPI](openapi/skydropx-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/skydropx.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/skydropx.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Skydropx Catalog API
-
-Read reference catalogs used to build shipments - available carrier services, packaging type codes, office/drop-off points, and SAT Carta Porte consignment-note codes required for Mexican shipping.
-
-- **Human URL:** [https://pro.skydropx.com/es-MX/api-docs](https://pro.skydropx.com/es-MX/api-docs)
-- **Base URL:** `https://pro.skydropx.com/api/v1`
-
-#### Tags
-
-- Carriers
-- Packagings
-- Consignment Notes
-
-#### Properties
-
-- [Documentation](https://docs.skydropx.com/)
-- [API Reference](https://pro.skydropx.com/es-MX/api-docs)
-- [OpenAPI](openapi/skydropx-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/skydropx.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/skydropx.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [Domain Security](security/skydropx-domain-security.yml)
-- [Authentication](authentication/skydropx-authentication.yml)
-- [LinkedIn](https://www.linkedin.com/company/skydropx)
 - [Website](https://www.skydropx.com/)
 - [Documentation](https://docs.skydropx.com/)
-- [Plans](plans/skydropx-plans-pricing.yml)
-- [Rate Limits](rate-limits/skydropx-rate-limits.yml)
-- [Fin Ops](finops/skydropx-finops.yml)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 24.8** — emerging · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 68.3 |
+| Contract quality | 49.7 |
+| Contract governance | 0.0 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 28.6 |
+| Access clarity | 5.3 |
+
+**Agent readiness 44.1** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 10.0** — Telecommunications
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/skydropx/](https://apis.io/providers/skydropx/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Skydropx: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/skydropx/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
